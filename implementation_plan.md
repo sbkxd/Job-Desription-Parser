@@ -1,13 +1,12 @@
 # Implementation Plan - JD Skill Extraction Pipeline
 
 ## Current Phase
-- **Phase 0: Repository Initialization**
+- **Phase 1: Environment Setup**
 
 ## Completed Phases
-*None*
+- **Phase 0**: Repository Initialization
 
 ## Remaining Phases
-- **Phase 1**: Environment Setup
 - **Phase 2**: CI/CD Foundation
 - **Phase 3**: Configuration Layer
 - **Phase 4**: Database Layer
@@ -54,5 +53,6 @@
 *None (Greenfield project)*
 
 ## Next Actions
-1. Complete Phase 0 by verifying scaffolding and committing.
-2. Initiate Phase 1 (Environment Setup with pyproject.toml, dependency managers, formatters/linters).
+1. Set up dependencies, linters, and formatters in `pyproject.toml` (Phase 1).
+2. Configure pre-commit hooks and verify configuration.
+3. Prepare GitHub Actions CI workflows for Phase 2.

@@ -31,10 +31,11 @@
 - **Phase 28**: Final Release
 
 ## In Progress
-- **Phase 0**: Repository Initialization
+*None*
 
 ## Blocked
 *None*
 
 ## Completed
-*None*
+- **Phase 0**: Repository Initialization
+
