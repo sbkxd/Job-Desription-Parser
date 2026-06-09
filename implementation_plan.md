@@ -53,6 +53,6 @@
 *None (Greenfield project)*
 
 ## Next Actions
-1. Configure SQLAlchemy database engine, session management, and add PostgreSQL service in docker-compose.yml (Milestone 1.4).
-2. Set up Alembic migrations (Milestone 1.5).
-3. Implement core database models (Milestone 1.6).
+1. Set up Alembic migrations (Milestone 1.5).
+2. Implement core database models (Milestone 1.6).
+3. Implement repository pattern for database interaction (Milestone 1.7).

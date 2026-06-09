@@ -34,8 +34,8 @@
   - [x] Milestone 1.1: Development Tooling
   - [x] Milestone 1.2: Application Configuration
   - [x] Milestone 1.3: Logging Infrastructure
-  - [/] Milestone 1.4: Database Foundation
-  - [ ] Milestone 1.5: Alembic Setup
+  - [x] Milestone 1.4: Database Foundation
+  - [/] Milestone 1.5: Alembic Setup
   - [ ] Milestone 1.6: Core Domain Models
   - [ ] Milestone 1.7: Repository Layer
   - [ ] Milestone 1.8: FastAPI Application Bootstrap
