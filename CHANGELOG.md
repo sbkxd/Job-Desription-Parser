@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Milestone 1.1: Development tooling configuration (Black, Ruff, MyPy, pre-commit, pytest).
 - Milestone 1.2: Centralized application configuration using Pydantic Settings (`app/config/settings.py`, `constants.py`, `environment.py`) with environment-based overrides and computed properties.
-- Unit tests for configuration layer (`tests/unit/test_config.py`).
+- Milestone 1.3: Structured JSON logging framework using `structlog` and custom correlation ID tracking middleware (`app/logging/logger.py`, `middleware.py`, `formatters.py`).
+- Unit tests for configuration and logging layers (`tests/unit/test_config.py`, `tests/unit/test_logging.py`).
 
 ## [0.0.0] - 2026-06-09
 ### Added

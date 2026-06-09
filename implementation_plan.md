@@ -53,6 +53,6 @@
 *None (Greenfield project)*
 
 ## Next Actions
-1. Implement structured JSON logging (structlog) and FastAPI correlation ID middleware (Milestone 1.3).
-2. Configure SQLAlchemy database engine, session management, and add PostgreSQL service in docker-compose.yml (Milestone 1.4).
-3. Set up Alembic migrations (Milestone 1.5).
+1. Configure SQLAlchemy database engine, session management, and add PostgreSQL service in docker-compose.yml (Milestone 1.4).
+2. Set up Alembic migrations (Milestone 1.5).
+3. Implement core database models (Milestone 1.6).
