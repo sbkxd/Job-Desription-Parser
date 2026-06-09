@@ -1,0 +1,6 @@
+site_name: JD Skill Extraction Pipeline Docs
+nav:
+  - Home: index.md
+  - Architecture: architecture.md
+  - Walkthrough: walkthrough.md
+theme: material

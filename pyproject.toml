@@ -1,0 +1,23 @@
+[project]
+name = "jd-skill-extraction-pipeline"
+version = "0.1.0"
+description = "Job Description Skill Extraction Pipeline"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "JD Skill Extraction Pipeline Authors" }
+]
+dependencies = []
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
