@@ -23,7 +23,9 @@ def test_default_settings():
     expected_async_url = (
         "postgresql+asyncpg://postgres:postgres@localhost:5432/jd_parser"
     )
-    expected_sync_url = "postgresql://postgres:postgres@localhost:5432/jd_parser"
+    expected_sync_url = (
+        "postgresql+psycopg://postgres:postgres@localhost:5432/jd_parser"
+    )
     assert settings.database_url == expected_async_url
     assert settings.sync_database_url == expected_sync_url
 
