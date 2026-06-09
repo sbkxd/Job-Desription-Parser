@@ -1,16 +1,25 @@
 # Walkthrough - JD Skill Extraction Pipeline
 
 ## What Was Built
-This repository contains the scaffolded directory structure and baseline configuration documents for the JD Skill Extraction Pipeline project.
+- Initial repository scaffolding (Phase 0).
+- Development tooling configuration (Milestone 1.1) including pre-commit, Black, Ruff, and MyPy.
+- Centralized application settings (Milestone 1.2) using Pydantic Settings supporting environment overrides, and automatically calculating PostgreSQL async/sync URLs.
 
 ## Why It Exists
-It acts as the structural foundation for the modular, domain-driven Python application that will be built to ingest job descriptions and extract structured skills.
+The settings module (`app/config/settings.py`) provides validation for all system-level configuration parameters (environment names, database credentials, logging levels, etc.), ensuring the application fails fast if configuration is missing or invalid.
 
 ## How It Works
-At this stage (Phase 0), the repository contains placeholders and organizational directories (`app/`, `docs/`, `infra/`, `mcp/`, `scripts/`, `skills/`, `tests/`) along with standard repository-level files.
+1. `app/config/settings.py`: Declares `Settings` model sub-classing `BaseSettings` which reads variables from environment or a `.env` file.
+2. `app/config/environment.py`: Contains `AppEnv` Enum (local, dev, staging, prod).
+3. `app/config/constants.py`: Stores default configuration values.
+4. Computed properties `database_url` and `sync_database_url` build valid PostgreSQL connection URIs dynamically.
 
 ## How to Run
-*(No code runnable yet in Phase 0. Runnable endpoints will start in subsequent phases.)*
+Create a `.env` file in the root directory and define settings. If no `.env` is present, defaults will be used.
 
 ## How to Test
-*(No automated code tests are active in Phase 0. Tests will be introduced in Phase 1.)*
+Run pytest inside the virtual environment:
+```bash
+.\.venv\Scripts\pytest
+```
+This runs the configuration tests in `tests/unit/test_config.py`.

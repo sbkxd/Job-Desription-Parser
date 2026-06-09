@@ -32,8 +32,8 @@
 ## In Progress
 - **Phase 1: Environment Setup & Infrastructure**
   - [x] Milestone 1.1: Development Tooling
-  - [/] Milestone 1.2: Application Configuration
-  - [ ] Milestone 1.3: Logging Infrastructure
+  - [x] Milestone 1.2: Application Configuration
+  - [/] Milestone 1.3: Logging Infrastructure
   - [ ] Milestone 1.4: Database Foundation
   - [ ] Milestone 1.5: Alembic Setup
   - [ ] Milestone 1.6: Core Domain Models

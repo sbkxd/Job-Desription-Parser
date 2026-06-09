@@ -53,6 +53,6 @@
 *None (Greenfield project)*
 
 ## Next Actions
-1. Set up dependencies, linters, and formatters in `pyproject.toml` (Phase 1).
-2. Configure pre-commit hooks and verify configuration.
-3. Prepare GitHub Actions CI workflows for Phase 2.
+1. Implement structured JSON logging (structlog) and FastAPI correlation ID middleware (Milestone 1.3).
+2. Configure SQLAlchemy database engine, session management, and add PostgreSQL service in docker-compose.yml (Milestone 1.4).
+3. Set up Alembic migrations (Milestone 1.5).
