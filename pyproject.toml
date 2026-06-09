@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "jd-skill-extraction-pipeline"
 version = "0.1.0"
@@ -7,11 +11,61 @@ requires-python = ">=3.11"
 authors = [
     { name = "JD Skill Extraction Pipeline Authors" }
 ]
-dependencies = []
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn>=0.28.0",
+    "pydantic>=2.6.0",
+    "pydantic-settings>=2.2.0",
+    "sqlalchemy[asyncio]>=2.0.0",
+    "asyncpg>=0.29.0",
+    "alembic>=1.13.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+    "playwright>=1.42.0",
+    "trafilatura>=1.8.0",
+    "pdfminer.six>=20231228",
+    "rapidfuzz>=3.6.0",
+    "transformers>=4.38.0",
+    "sentence-transformers>=2.5.0",
+    "torch>=2.2.0",
+    "mcp>=0.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=24.2.0",
+    "ruff>=0.3.0",
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "types-requests>=2.31.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
 
 [tool.ruff]
 line-length = 88
 target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+]
+ignore = []
 
 [tool.black]
 line-length = 88
@@ -21,3 +75,4 @@ target-version = ['py311']
 python_version = "3.11"
 strict = true
 ignore_missing_imports = true
+exclude = [".venv", "venv", "tests/"]
