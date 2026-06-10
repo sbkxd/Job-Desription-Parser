@@ -11,6 +11,7 @@ try:
         Browser,
         BrowserContext,
         Page,
+        ViewportSize,
         async_playwright,
     )
 
@@ -18,7 +19,7 @@ try:
 except ImportError:
     pass
 
-_DEFAULT_VIEWPORT = {"width": 1280, "height": 800}
+_DEFAULT_VIEWPORT: "ViewportSize" = {"width": 1280, "height": 800}
 _DEFAULT_USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
     "AppleWebKit/537.36 (KHTML, like Gecko) "

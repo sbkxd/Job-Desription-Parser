@@ -139,7 +139,7 @@ class TrafilaturaParser:
     def _bs4_fallback(self, html: str) -> str:
         """Last-resort: strip all HTML tags using BeautifulSoup."""
         try:
-            from bs4 import BeautifulSoup  # type: ignore[import-untyped]
+            from bs4 import BeautifulSoup
 
             soup = BeautifulSoup(html, "html.parser")
             for tag in soup(["script", "style", "nav", "header", "footer"]):
