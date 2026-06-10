@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-06-10
+
+### Added
+- Milestone 2.1: Ingestion domain schemas (`app/ingestion/schemas/schemas.py`): `SourceType` (9 values), `FetchStatus` (5 values), `DocumentMetadata`, `FetchedDocument` with `to_output()` contract, `IngestionRequest` (validated URL, timeout bounds), `IngestionResponse`.
+- Milestone 2.2: Source Detection Engine (`app/ingestion/detectors/url_detector.py`): `SourceDetector` classifies URLs to `SourceType`; handles Naukri, Foundit, Indeed, Greenhouse, Lever, Workable, Generic ATS (path-based), PDF, Unknown. `requires_javascript()` and `is_supported()` helpers. Module-level `detector` singleton.
+- Milestone 2.3: Requests Fetcher (`app/ingestion/fetchers/requests_fetcher.py`): `RequestsFetcher` with 3-UA rotation pool, configurable retry/backoff, extra headers, redirect tracking, `FetchResult` dataclass. Context manager support.
+- Milestone 2.4: Trafilatura Content Extractor (`app/ingestion/parsers/trafilatura_parser.py`): `TrafilaturaParser` with 3-tier extraction (primary → broad recall → BS4 fallback). `ParseResult` dataclass with metadata. Config-tuned for sparse JDs.
+- Milestone 2.5: Playwright Fetcher (`app/ingestion/fetchers/playwright_fetcher.py`): `PlaywrightFetcher` async headless Chromium. Scroll-to-trigger, console error capture, bot-evasion headers. `PlaywrightResult` dataclass. Graceful degradation when Playwright not installed. Imported `ViewportSize` for type safety.
+- 115 new unit tests for Phase 2 ingestion components (156 total, 89% coverage).
+
+### Changed
+- `app/logging/logger.py`: `configure_logging()` now accepts `log_level: str | None` and `json_logs: bool | None` keyword arguments so `app/main.py` can pass settings-derived values directly. JSON flag logic changed from `APP_ENV == LOCAL` to `APP_ENV != LOCAL` for clarity.
+- `app/repositories/job_repository.py`: Removed three stale `# type: ignore[attr-defined]` comments now that MyPy resolves SQLAlchemy 2.0 `Mapped` column attributes natively.
+- `app/repositories/skill_repository.py`: Removed stale `# type: ignore[attr-defined]` from `ilike()` call.
+- `app/ingestion/parsers/trafilatura_parser.py`: Removed stale `# type: ignore[import-untyped]` from `bs4` import (stubs now resolvable).
+- `app/ingestion/fetchers/playwright_fetcher.py`: Black auto-formatted; added `ViewportSize` import to fix `arg-type` MyPy error.
+
+### Fixed
+- MyPy: All 12 errors across 6 files resolved. `mypy app/` now reports `no issues found in 35 source files`.
+- Black: All 35 `app/` source files now pass `black --check`.
+- Ruff: All `app/` source files pass `ruff check`.
+
 ## [0.2.0] - 2026-06-09
 ### Added
 - Milestone 1.5: Alembic initialized; initial revision `3bc883988942`; `env.py` wired to project `Base` metadata.
