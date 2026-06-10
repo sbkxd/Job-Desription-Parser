@@ -1,7 +1,7 @@
 # Implementation Plan - JD Skill Extraction Pipeline
 
 ## Current Phase
-- **Phase 6**: Review Workflows & Review Queue (next)
+- **Phase 7**: MCP Tools (next)
 
 ## Completed Phases
 - **Phase 0**: Repository Initialization
@@ -10,9 +10,9 @@
 - **Phase 3**: Preprocessing & JD Segmentation
 - **Phase 4**: Information Extraction Engine
 - **Phase 5**: ESCO Normalization & Taxonomy Integration
+- **Phase 6**: Review System, Taxonomy Gaps & Quality Control
 
 ## Remaining Phases
-- **Phase 6**: Review Workflows & Review Queue
 - **Phase 7**: MCP Tools
 - **Phase 8**: Ollama Integration
 - **Phase 9**: Deployment Enhancements & Cloud Readiness
@@ -23,6 +23,7 @@
 1. **Ingestion Framework placed in Phase 2**: Source detection, fetchers (Requests + Playwright), content extraction (Trafilatura) and ingestion schemas were implemented alongside CI/CD to validate the full pipeline early.
 2. **Playwright fetcher is mocked in tests**: Full browser tests are left for integration testing (Phase 2+ CI job). Unit tests use `_do_fetch` mocking to keep tests fast and dependency-free.
 3. **BeautifulSoup as last-resort fallback**: Trafilatura is the primary extractor; BS4 is the final fallback if trafilatura returns nothing.
+4. **Cascade normalizer & Quality control engine**: Designed a multi-layered match-and-rank normalization cascade with a quality control review queue to capture, flag, and audit edge cases.
 
 ## Risks
 1. **Dependency Versions**: Integrating DeBERTa-v3, FastAPI, and SQLAlchemy 2.0 requires careful dependency alignment.
@@ -40,12 +41,13 @@
 3. **NLP Engine**: Hugging Face DeBERTa-v3-small for Named Entity Recognition (NER), sentence-transformers for ESCO similarity mapping.
 4. **Ingestion**: Requests for static pages, Playwright for JavaScript-heavy ATS pages.
 5. **Content Extraction**: Trafilatura (primary) → Trafilatura broad-recall fallback → BeautifulSoup last resort.
+6. **Review Queue State Machine**: Tracks pending, in-review, approved, rejected, and corrected states, with persistent DB auditing.
 
 ## Technical Debt
 - `app/logging/formatters.py` has 0% coverage (utility module, unused by current tests). To be addressed in Phase 21 (Observability).
 - Playwright live browser integration tests deferred to Phase 2+ CI integration test job.
 
-## Next Phase Goals (Phase 6: Review Workflows & Review Queue)
-1. Design state machine/workflow for the review queue.
-2. Implement front-end review components or APIs.
-3. Manage transitions for jobs flagged for human review.
+## Next Phase Goals (Phase 7: MCP Tools)
+1. Design Model Context Protocol (MCP) tool bindings.
+2. Expose pipeline features via MCP.
+3. Setup MCP server configuration.

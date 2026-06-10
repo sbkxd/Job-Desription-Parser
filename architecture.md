@@ -72,6 +72,17 @@ graph TD
 | `CandidateRanker` | `app.normalization.rankers.candidate_ranker` | Merges scores, handles tie resolutions, and determines top candidates. |
 | `SkillNormalizationService` | `app.normalization.services.normalization_service` | Orchestrates the multi-layered match-and-rank flow to normalize raw skill texts. |
 
+### Review System, Taxonomy Gaps & Quality Control (Phase 6)
+| Component | Module | Responsibility |
+|-----------|--------|----------------|
+| `CustomTaxonomyLoader` | `app.normalization.loaders.custom_taxonomy_loader` | Loads custom version-controlled taxonomy JSON expansions alongside ESCO. |
+| `ConfidenceEvaluator` | `app.review.evaluators.confidence_evaluator` | Evaluates matching scores against configurable thresholds to flag uncertain matches. |
+| `OutOfTaxonomyDetector` | `app.review.evaluators.out_of_taxonomy` | Detects modern technical skills absent in ESCO (e.g. LangChain, CrewAI) and flags them. |
+| `ReviewQueueManager` | `app.review.queues.queue_manager` | Handles persistent queue status transitions (`pending`, `in_review`, `approved`, etc.). |
+| `ReviewDecisionService` | `app.review.decisions.decision_engine` | Evaluates and applies reviewer decisions (approve, reject, correct/replace). |
+| `AuditTrailSystem` | `app.review.audit.audit_trail` | Writes structured audit entries tracking reviewer actions, confidence, and timestamps. |
+| `ReviewService` | `app.review.services.review_service` | Orchestrates evaluate, flag, queuing, decisions, and auditing workflows. |
+
 ## Data Flow
 ```mermaid
 sequenceDiagram
@@ -210,3 +221,4 @@ graph LR
 | DeBERTa-v3 + Gazetteer dual skill extraction | Regex gazetteer catches exact tech names (e.g. C++, Python) reliably; DeBERTa identifies long-tail/contextual skills. |
 | Deterministic experience & requirement classifiers | Initial rules ensure predictability and correctness before scaling up to LLMs. |
 | Multi-layered skill normalization pipeline | Exact, alias, fuzzy, and semantic embedding matchers run in cascade order to balance speed, precision, and semantic recall. |
+| Quality Control Review Queue & Auditing | Low-confidence mappings (<0.90) and out-of-taxonomy modern terms (e.g. LangChain) trigger human review states. Every action (approve, reject, correct) is written to a structured database audit log to prepare for future LLM integration. |

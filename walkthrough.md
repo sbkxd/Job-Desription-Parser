@@ -110,7 +110,26 @@
   - `skills/normalize_skill.md` detailing system prompts, constraints, and edge case rules.
   - `tests/fixtures/normalization/skills_fixtures.json` providing reference software, data science, database, and devops skill fixtures.
 
-
+### Phase 6: Review System, Taxonomy Gaps & Quality Control
+- **Review Schemas** (`app/review/schemas/schemas.py`):
+  - Pydantic v2 schemas: `ReviewItem`, `ReviewDecision`, `AuditRecord`, `ReviewResult`, `ReviewStatusSchema`.
+- **Confidence Evaluator & Out-of-Taxonomy Detector** (`app/review/evaluators/`):
+  - `ConfidenceEvaluator`: Maps matching confidence scores against configurable thresholds.
+  - `OutOfTaxonomyDetector`: Identifies modern skills (e.g. LangChain, CrewAI) absent from ESCO.
+- **Custom Taxonomy Extension Framework** (`app/normalization/loaders/custom_taxonomy_loader.py`):
+  - Loads optional, version-controlled custom taxonomy files from `data/custom_taxonomy/`.
+- **Review Queue System & Decision Engine** (`app/review/queues/` & `app/review/decisions/`):
+  - `ReviewQueueManager`: Manages persistent queue status transitions.
+  - `ReviewDecisionService`: Applies reviewer actions (approve, reject, correct/replace).
+- **Audit Trail System** (`app/review/audit/audit_trail.py`):
+  - Persists structured logs of all reviewer actions, confidence scores, and timestamps in database.
+- **Review Orchestration Service** (`app/review/services/review_service.py`):
+  - Coordinates flagging, queue insertions, human decisions, and auditing.
+- **Review APIs** (`app/api/v1/endpoints/review.py`):
+  - Routes: `GET /reviews`, `GET /reviews/{id}`, `POST /reviews/{id}/approve`, `POST /reviews/{id}/reject`, `POST /reviews/{id}/correct`.
+- **Review Skill File & Fixtures**:
+  - `skills/review_flag.md` defining QC rules, edge cases, and JSON schemas.
+  - `tests/fixtures/review/review_fixtures.json` dataset for testing low confidence, out-of-taxonomy, and alias conflict cases.
 
 ## Why It Exists
 - The settings module ensures the application fails fast if configuration is missing.
@@ -191,6 +210,11 @@ docker compose up db -d
 - `POST /api/v1/preprocess/segment` — Preprocesses and segments raw JD text
 - `POST /api/v1/extract` — Extracts structured skills, experience, seniority, and requirement types
 - `POST /api/v1/normalize/skills` — Normalizes raw skills to canonical ESCO terms
+- `GET /api/v1/reviews` — Lists active review queue items
+- `GET /api/v1/reviews/{id}` — Gets details of a review queue item
+- `POST /api/v1/reviews/{id}/approve` — Approves a suggested skill mapping
+- `POST /api/v1/reviews/{id}/reject` — Rejects a suggested skill mapping
+- `POST /api/v1/reviews/{id}/correct` — Overrides a suggested skill mapping
 - `GET /docs` — Swagger UI
 - `GET /redoc` — ReDoc UI
 
@@ -208,7 +232,7 @@ Run quality checks:
 .venv\Scripts\python -m mypy app/
 ```
 
-### Test Coverage Summary (Phase 5 Complete)
+### Test Coverage Summary (Phase 6 Complete)
 | Module | Coverage |
 |--------|----------|
 | `app/config/` | 100% |
@@ -220,4 +244,5 @@ Run quality checks:
 | `app/preprocessing/` | 94% |
 | `app/extraction/` | 91% |
 | `app/normalization/` | 98% |
-| **Total** | **93%** |
+| `app/review/` | 92% |
+| **Total** | **92%** |

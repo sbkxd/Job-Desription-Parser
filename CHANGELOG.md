@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-06-10
+
+### Added
+- Milestone 6.1: Review Schemas using Pydantic v2.
+- Milestone 6.2: Confidence Evaluation Engine mapping match scores to ReviewStatus and reason with configurable thresholds.
+- Milestone 6.3: Out-of-Taxonomy Detector classifying skills not in ESCO (e.g. LangChain, CrewAI) and returning review flag.
+- Milestone 6.4: Custom Taxonomy Loader and Framework to load user-defined extensions alongside canonical ESCO.
+- Milestone 6.5: Review Queue System manager layer with support for PENDING, IN_REVIEW, APPROVED, REJECTED, and CORRECTED states.
+- Milestone 6.6: Review Decision Engine processing decisions (approve, reject, correct) and updating JobSkill mapping.
+- Milestone 6.7: Audit Trail System tracking review action histories.
+- Milestone 6.8: Review Orchestration Service (`ReviewService`) implementing the complete quality control pipeline.
+- Milestone 6.9: `skills/review_flag.md` system prompt and guidelines with strict JSON output schema.
+- Milestone 6.10: Review APIs (`GET /reviews`, `GET /reviews/{id}`, `POST /reviews/{id}/approve`, `reject`, `correct`).
+- Milestone 6.11: Review datasets and fixture configuration (`tests/fixtures/review/review_fixtures.json`).
+- Milestone 6.12: Database Alembic migration adding `in_review` and `corrected` to `reviewstatus` enum in PostgreSQL.
+
+### Fixed
+- Fixed C901 cognitive complexity in `submit_decision` by refactoring into smaller, structured helper methods.
+- Resolved generic `dict` type annotations to `dict[str, Any]` to conform with strict MyPy validation settings.
+
 ## [0.6.0] - 2026-06-10
 
 ### Added
