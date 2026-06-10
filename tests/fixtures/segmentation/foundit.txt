@@ -1,0 +1,15 @@
+Altrosyn Global Services is looking for a Senior Developer.
+
+Job responsibilities:
+- Manage a team of 4 developers.
+- Maintain production deployments.
+
+Skills:
+- Docker and Kubernetes.
+- Python.
+
+Preferred:
+- AWS certification.
+
+Compensation:
+- Industry standard salary.

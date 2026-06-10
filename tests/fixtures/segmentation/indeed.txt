@@ -1,0 +1,15 @@
+Full Job Description:
+
+Primary Duties:
+- Write clean React components.
+- Collaborate with backend engineers.
+
+Work Experience:
+- 3 years of frontend development.
+- Proficient in Typescript.
+
+Nice to Have:
+- Experience with Next.js.
+
+Perks:
+- PTO and dental.

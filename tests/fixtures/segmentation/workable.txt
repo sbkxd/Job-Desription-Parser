@@ -1,0 +1,10 @@
+About us:
+Altrosyn is an AI research lab.
+
+Requirements:
+- Strong math background.
+- PyTorch expert.
+
+Perks:
+- Gym membership.
+- Fully remote work.

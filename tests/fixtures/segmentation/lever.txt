@@ -1,0 +1,18 @@
+Altrosyn - Senior NLP Engineer
+
+We are a remote-first team scaling up rapidly.
+
+What you'll do:
+- Develop NLP extraction models.
+- Maintain production deployments.
+
+Required:
+- 5+ years of experience.
+- Experience with Hugging Face.
+
+Preferred:
+- PhD in Computer Science or similar.
+
+We offer:
+- remote first culture
+- health insurance
