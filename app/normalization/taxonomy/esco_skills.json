@@ -1,0 +1,218 @@
+[
+  {
+    "esco_id": "esco_python",
+    "name": "Python",
+    "description": "An interpreted, high-level, general-purpose programming language.",
+    "alternative_labels": ["Python 3", "Python3", "python"]
+  },
+  {
+    "esco_id": "esco_javascript",
+    "name": "JavaScript",
+    "description": "A lightweight, interpreted, object-oriented language with first-class functions.",
+    "alternative_labels": ["JS", "js", "Javascript"]
+  },
+  {
+    "esco_id": "esco_typescript",
+    "name": "TypeScript",
+    "description": "A typed superset of JavaScript that compiles to plain JavaScript.",
+    "alternative_labels": ["TS", "ts", "Typescript"]
+  },
+  {
+    "esco_id": "esco_go",
+    "name": "Go",
+    "description": "An open source programming language supported by Google.",
+    "alternative_labels": ["Golang", "go", "golang"]
+  },
+  {
+    "esco_id": "esco_java",
+    "name": "Java",
+    "description": "A high-level, class-based, object-oriented programming language.",
+    "alternative_labels": ["Java SE", "Java EE", "java"]
+  },
+  {
+    "esco_id": "esco_cpp",
+    "name": "C++",
+    "description": "A general-purpose programming language created by Bjarne Stroustrup.",
+    "alternative_labels": ["CPP", "cpp", "c plus plus"]
+  },
+  {
+    "esco_id": "esco_csharp",
+    "name": "C#",
+    "description": "A modern, general-purpose, object-oriented programming language developed by Microsoft.",
+    "alternative_labels": ["C-sharp", "csharp", "c#"]
+  },
+  {
+    "esco_id": "esco_sql",
+    "name": "SQL",
+    "description": "A domain-specific language used in programming and designed for managing data in RDBMS.",
+    "alternative_labels": ["sql", "Structured Query Language"]
+  },
+  {
+    "esco_id": "esco_postgresql",
+    "name": "PostgreSQL",
+    "description": "A free and open-source relational database management system emphasizing extensibility.",
+    "alternative_labels": ["Postgres", "postgresql"]
+  },
+  {
+    "esco_id": "esco_mysql",
+    "name": "MySQL",
+    "description": "An open-source relational database management system.",
+    "alternative_labels": ["mysql"]
+  },
+  {
+    "esco_id": "esco_mongodb",
+    "name": "MongoDB",
+    "description": "A source-available cross-platform document-oriented database program.",
+    "alternative_labels": ["mongodb", "Mongo"]
+  },
+  {
+    "esco_id": "esco_redis",
+    "name": "Redis",
+    "description": "An in-memory data structure store used as a distributed, in-memory key-value database.",
+    "alternative_labels": ["redis"]
+  },
+  {
+    "esco_id": "esco_aws",
+    "name": "AWS",
+    "description": "Amazon Web Services, a comprehensive and broadly adopted cloud platform.",
+    "alternative_labels": ["Amazon Web Services", "aws"]
+  },
+  {
+    "esco_id": "esco_gcp",
+    "name": "GCP",
+    "description": "Google Cloud Platform, a suite of cloud computing services.",
+    "alternative_labels": ["Google Cloud Platform", "gcp"]
+  },
+  {
+    "esco_id": "esco_azure",
+    "name": "Azure",
+    "description": "Microsoft Azure, a cloud computing service operated by Microsoft.",
+    "alternative_labels": ["Microsoft Azure", "azure"]
+  },
+  {
+    "esco_id": "esco_docker",
+    "name": "Docker",
+    "description": "A set of platform as a service products that use OS-level virtualization.",
+    "alternative_labels": ["docker"]
+  },
+  {
+    "esco_id": "esco_kubernetes",
+    "name": "Kubernetes",
+    "description": "An open-source container orchestration system for automating software deployment.",
+    "alternative_labels": ["K8s", "k8s", "kubernetes"]
+  },
+  {
+    "esco_id": "esco_git",
+    "name": "Git",
+    "description": "A distributed version control system that tracks changes in any set of computer files.",
+    "alternative_labels": ["git"]
+  },
+  {
+    "esco_id": "esco_react",
+    "name": "React",
+    "description": "A free and open-source front-end JavaScript library for building user interfaces.",
+    "alternative_labels": ["ReactJS", "React.js", "react"]
+  },
+  {
+    "esco_id": "esco_angular",
+    "name": "Angular",
+    "description": "A TypeScript-based, free and open-source web application framework.",
+    "alternative_labels": ["angular"]
+  },
+  {
+    "esco_id": "esco_vue",
+    "name": "Vue.js",
+    "description": "A model-view-viewmodel front-end JavaScript framework for building user interfaces.",
+    "alternative_labels": ["Vue", "vue", "VueJS"]
+  },
+  {
+    "esco_id": "esco_node",
+    "name": "Node.js",
+    "description": "An open-source, cross-platform JavaScript runtime environment.",
+    "alternative_labels": ["Node", "node", "NodeJS"]
+  },
+  {
+    "esco_id": "esco_fastapi",
+    "name": "FastAPI",
+    "description": "A modern, fast web framework for building APIs with Python 3.8+.",
+    "alternative_labels": ["fastapi"]
+  },
+  {
+    "esco_id": "esco_django",
+    "name": "Django",
+    "description": "A Python-based free and open-source web framework.",
+    "alternative_labels": ["django"]
+  },
+  {
+    "esco_id": "esco_pytorch",
+    "name": "PyTorch",
+    "description": "An open-source machine learning library based on the Torch library.",
+    "alternative_labels": ["pytorch"]
+  },
+  {
+    "esco_id": "esco_tensorflow",
+    "name": "TensorFlow",
+    "description": "A free and open-source software library for machine learning and artificial intelligence.",
+    "alternative_labels": ["tensorflow"]
+  },
+  {
+    "esco_id": "esco_pandas",
+    "name": "Pandas",
+    "description": "A software library written for the Python programming language for data manipulation.",
+    "alternative_labels": ["pandas"]
+  },
+  {
+    "esco_id": "esco_numpy",
+    "name": "NumPy",
+    "description": "A library for the Python programming language, adding support for large arrays.",
+    "alternative_labels": ["numpy"]
+  },
+  {
+    "esco_id": "esco_machine_learning",
+    "name": "Machine Learning",
+    "description": "The scientific study of algorithms and statistical models that computer systems use.",
+    "alternative_labels": ["ML", "machine learning"]
+  },
+  {
+    "esco_id": "esco_deep_learning",
+    "name": "Deep Learning",
+    "description": "A class of machine learning algorithms that uses multiple layers to progressively extract features.",
+    "alternative_labels": ["DL", "deep learning"]
+  },
+  {
+    "esco_id": "esco_nlp",
+    "name": "NLP",
+    "description": "A subfield of linguistics, computer science, and artificial intelligence concerned with computer-human languages.",
+    "alternative_labels": ["Natural Language Processing", "nlp"]
+  },
+  {
+    "esco_id": "esco_rest",
+    "name": "REST",
+    "description": "Representational State Transfer API architectural style.",
+    "alternative_labels": ["RESTful", "REST APIs"]
+  },
+  {
+    "esco_id": "esco_cicd",
+    "name": "CI/CD",
+    "description": "Continuous Integration and Continuous Deployment automation pipeline.",
+    "alternative_labels": ["Continuous Integration", "Continuous Deployment"]
+  },
+  {
+    "esco_id": "esco_html",
+    "name": "HTML",
+    "description": "Hypertext Markup Language, standard markup language for documents in web browsers.",
+    "alternative_labels": ["HTML5"]
+  },
+  {
+    "esco_id": "esco_css",
+    "name": "CSS",
+    "description": "Cascading Style Sheets, style sheet language for HTML.",
+    "alternative_labels": ["CSS3"]
+  },
+  {
+    "esco_id": "esco_tailwind",
+    "name": "Tailwind",
+    "description": "Utility-first CSS framework.",
+    "alternative_labels": ["TailwindCSS"]
+  }
+]
