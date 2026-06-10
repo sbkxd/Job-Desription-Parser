@@ -60,6 +60,18 @@ graph TD
 | `RequirementClassifier` | `app.extraction.requirements.requirement_classifier` | Classifies requirements into Required, Preferred, or Optional. |
 | `ExtractionService` | `app.extraction.services.extraction_service` | Orchestrates the extractors and runs validation checks. |
 
+### ESCO Normalization & Taxonomy Integration (Phase 5)
+| Component | Module | Responsibility |
+|-----------|--------|----------------|
+| `TaxonomyLoader` | `app.normalization.loaders.taxonomy_loader` | Loads local ESCO taxonomy dataset containing concepts, labels, and descriptions. |
+| `TaxonomyRepository` | `app.normalization.taxonomy.taxonomy_repository` | In-memory singleton caching exact/alias indices and sentence embeddings for startup. |
+| `ExactMatcher` | `app.normalization.matchers.exact_matcher` | Fast exact string matching against canonical ESCO skill names (score = 1.0). |
+| `AliasMatcher` | `app.normalization.matchers.alias_matcher` | Maps common abbreviations/shorthands using target alias structures (score = 0.95). |
+| `FuzzyMatcher` | `app.normalization.matchers.fuzzy_matcher` | Utilizes RapidFuzz distance search to handle typos/variations (score = 0.82-0.95). |
+| `EmbeddingMatcher` | `app.normalization.matchers.embedding_matcher` | Runs sentence-transformers (all-MiniLM-L6-v2) for semantic mapping (score = 0.50-1.00). |
+| `CandidateRanker` | `app.normalization.rankers.candidate_ranker` | Merges scores, handles tie resolutions, and determines top candidates. |
+| `SkillNormalizationService` | `app.normalization.services.normalization_service` | Orchestrates the multi-layered match-and-rank flow to normalize raw skill texts. |
+
 ## Data Flow
 ```mermaid
 sequenceDiagram
@@ -197,3 +209,4 @@ graph LR
 | SourceType enum as string enum | String values enable JSON serialization without extra transformations. |
 | DeBERTa-v3 + Gazetteer dual skill extraction | Regex gazetteer catches exact tech names (e.g. C++, Python) reliably; DeBERTa identifies long-tail/contextual skills. |
 | Deterministic experience & requirement classifiers | Initial rules ensure predictability and correctness before scaling up to LLMs. |
+| Multi-layered skill normalization pipeline | Exact, alias, fuzzy, and semantic embedding matchers run in cascade order to balance speed, precision, and semantic recall. |

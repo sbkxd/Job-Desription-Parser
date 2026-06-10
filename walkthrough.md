@@ -89,6 +89,28 @@
 - **Few-Shot Prompt Skill Files** (`skills/extract_skills.md` & `skills/classify_requirement.md`):
   - System prompts and rules for model evaluation.
 
+### Phase 5: ESCO Normalization & Taxonomy Integration
+- **Normalization Schemas** (`app/normalization/schemas/schemas.py`):
+  - Pydantic v2 schemas: `RawSkill`, `EscoSkill`, `SkillCandidate`, `NormalizedSkill`, `MatchResult`, `NormalizationResult`.
+- **Taxonomy Loaders & Repositories** (`app/normalization/loaders/taxonomy_loader.py` & `app/normalization/taxonomy/taxonomy_repository.py`):
+  - Local dataset loader parsing ESCO skills from JSON.
+  - In-memory singleton caching exact index, alias index, and sentence embeddings on startup.
+- **Multi-layered Matchers** (`app/normalization/matchers/`):
+  - `ExactMatcher`: Case-insensitive exact name lookup (confidence = 1.0).
+  - `AliasMatcher`: Match against known abbreviations/shorthands (confidence = 0.95).
+  - `FuzzyMatcher`: RapidFuzz string distance matching with Top-k candidate retrieval.
+  - `EmbeddingMatcher`: sentence-transformers (`all-MiniLM-L6-v2`) cosine similarity semantic match.
+- **Candidate Ranker & Confidence Engine** (`app/normalization/rankers/candidate_ranker.py`):
+  - Resolves duplicate matches, ranks candidates, and calculates deterministic confidence scores.
+- **Skill Normalization Service** (`app/normalization/services/normalization_service.py`):
+  - Orchestrator driving preprocessing, exact, alias, fuzzy, and embedding match cascades.
+- **Normalization Endpoint** (`POST /api/v1/normalize/skills`):
+  - REST API endpoint for standardizing raw skill arrays.
+- **Skill File & Dataset**:
+  - `skills/normalize_skill.md` detailing system prompts, constraints, and edge case rules.
+  - `tests/fixtures/normalization/skills_fixtures.json` providing reference software, data science, database, and devops skill fixtures.
+
+
 
 ## Why It Exists
 - The settings module ensures the application fails fast if configuration is missing.
@@ -124,6 +146,17 @@
 5. `RequirementClassifier` maps requirement sentences to `Required`/`Preferred`/`Optional`.
 6. Output is validated and compiled into an `ExtractionResult` Pydantic payload.
 
+### Skill Normalization Pipeline
+1. A list of raw skills is sent to `SkillNormalizationService`.
+2. Each skill goes through standard preprocessing (lowercasing, suffix cleanup, spacing standardization).
+3. `ExactMatcher` searches for exact matches in canonical taxonomy names.
+4. If not resolved, `AliasMatcher` matches alternative labels.
+5. If still not resolved, `FuzzyMatcher` searches for fuzzy variations using RapidFuzz.
+6. If still not resolved, `EmbeddingMatcher` generates semantic vectors and performs a similarity check against cached taxonomy embeddings.
+7. Matches are routed to `CandidateRanker` and `ConfidenceEngine` to filter candidates above thresholds, resolve duplicates, and assign explainable confidence scores.
+8. Unresolved skills are marked as `unmapped` with a 0.0 confidence level.
+
+
 
 ### Configure Logging
 - `app/logging/logger.py`: `configure_logging(log_level?, json_logs?)` sets up structlog with environment-aware renderer.
@@ -157,6 +190,7 @@ docker compose up db -d
 - `GET /api/v1/health/ready` — Readiness probe (checks DB)
 - `POST /api/v1/preprocess/segment` — Preprocesses and segments raw JD text
 - `POST /api/v1/extract` — Extracts structured skills, experience, seniority, and requirement types
+- `POST /api/v1/normalize/skills` — Normalizes raw skills to canonical ESCO terms
 - `GET /docs` — Swagger UI
 - `GET /redoc` — ReDoc UI
 
@@ -174,7 +208,7 @@ Run quality checks:
 .venv\Scripts\python -m mypy app/
 ```
 
-### Test Coverage Summary (Phase 4 Complete)
+### Test Coverage Summary (Phase 5 Complete)
 | Module | Coverage |
 |--------|----------|
 | `app/config/` | 100% |
@@ -185,4 +219,5 @@ Run quality checks:
 | `app/ingestion/` | 82% (Playwright live paths mocked) |
 | `app/preprocessing/` | 94% |
 | `app/extraction/` | 91% |
-| **Total** | **92%** |
+| `app/normalization/` | 98% |
+| **Total** | **93%** |

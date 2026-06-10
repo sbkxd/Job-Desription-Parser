@@ -1,7 +1,6 @@
 # Tasks - JD Skill Extraction Pipeline
 
 ## Pending
-- **Phase 5**: ESCO Normalization & Taxonomy Integration
 - **Phase 6**: Review Workflows & Review Queue
 - **Phase 7**: MCP Tools
 - **Phase 8**: Ollama Integration
@@ -16,6 +15,21 @@
 *None*
 
 ## Completed
+- **Phase 5: ESCO Normalization & Taxonomy Integration**
+  - [x] Milestone 5.1: Normalization Schemas (Pydantic v2 domain schemas)
+  - [x] Milestone 5.2: ESCO Dataset Ingestion (local loaders + cache on startup)
+  - [x] Milestone 5.3: Taxonomy Indexing (exact, alias, normalized text indexes)
+  - [x] Milestone 5.4: Skill Preprocessing (lowercasing, punctuation, versioning)
+  - [x] Milestone 5.5: Exact Match Engine (1.0 confidence exact matching)
+  - [x] Milestone 5.6: Alias Matching (alias dict and configuration matching)
+  - [x] Milestone 5.7: RapidFuzz Matching (top-k fuzzy matches and thresholds)
+  - [x] Milestone 5.8: Embedding Matching (sentence-transformers semantic matches)
+  - [x] Milestone 5.9: Candidate Ranking Engine (combining multiple match strategies)
+  - [x] Milestone 5.10: Confidence Engine (explainable deterministic scoring)
+  - [x] Milestone 5.11: Normalization Service (SkillNormalizationService orchestration)
+  - [x] Milestone 5.12: normalize_skill.md Skill File (system prompts + examples)
+  - [x] Milestone 5.13: Normalization API (POST /normalize/skills HTTP endpoint)
+  - [x] Milestone 5.14: Normalization Dataset & Unit/Integration Tests (Representative fixtures + test suite)
 - **Phase 4: Information Extraction Engine**
   - [x] Milestone 4.1: Extraction Schemas (Pydantic v2 domain schemas)
   - [x] Milestone 4.2: Model Management Layer (lazy-loading DeBERTa-v3-small infrastructure)

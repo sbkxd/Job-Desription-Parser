@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-06-10
+
+### Added
+- Milestone 5.1: Normalization Schemas (Pydantic v2 schemas: `RawSkill`, `EscoSkill`, `SkillCandidate`, `NormalizedSkill`, `MatchResult`, `NormalizationResult`).
+- Milestone 5.2 & 5.3: Local ESCO Taxonomy Ingestion Loader and Repository with in-memory indexes and precomputed sentence embeddings.
+- Milestone 5.4: Skill Preprocessing engine supporting suffix cleaning, lowercasing, and whitespace normalization.
+- Milestone 5.5: Exact Match Engine verifying exact case-insensitive matches against canonical skills with 1.0 confidence.
+- Milestone 5.6: Alias Matching engine supporting known variants (e.g. `ReactJS` -> `React`) with 0.95 confidence.
+- Milestone 5.7: Fuzzy Match Engine utilizing RapidFuzz for distance similarity matching.
+- Milestone 5.8: Embedding Match Engine computing cosine similarity against taxonomy embeddings using sentence-transformers `all-MiniLM-L6-v2`.
+- Milestone 5.9 & 5.10: Candidate Ranking and Confidence Engines aggregating scores across matchers.
+- Milestone 5.11: `SkillNormalizationService` orchestrating the multi-layered match-and-rank pipeline.
+- Milestone 5.12: System prompts and edge-case instructions in `skills/normalize_skill.md`.
+- Milestone 5.13: Normalization API endpoint `POST /api/v1/normalize/skills`.
+- Milestone 5.14: Ingestion of software, ML, database, and devops skill fixtures in `tests/fixtures/normalization/skills_fixtures.json`.
+
+### Fixed
+- Fixed mypy validation issues in `np.linalg.norm` typing and repository `_initialized` class variable checks.
+- Formatted normalization module and test files using Black.
+- Cleaned and checked code quality using Ruff.
+
 ## [0.5.0] - 2026-06-10
 
 ### Added

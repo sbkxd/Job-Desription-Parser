@@ -1,7 +1,7 @@
 # Implementation Plan - JD Skill Extraction Pipeline
 
 ## Current Phase
-- **Phase 5**: ESCO Normalization & Taxonomy Integration (next)
+- **Phase 6**: Review Workflows & Review Queue (next)
 
 ## Completed Phases
 - **Phase 0**: Repository Initialization
@@ -9,9 +9,9 @@
 - **Phase 2**: CI/CD Foundation & Ingestion Framework
 - **Phase 3**: Preprocessing & JD Segmentation
 - **Phase 4**: Information Extraction Engine
+- **Phase 5**: ESCO Normalization & Taxonomy Integration
 
 ## Remaining Phases
-- **Phase 5**: ESCO Normalization & Taxonomy Integration
 - **Phase 6**: Review Workflows & Review Queue
 - **Phase 7**: MCP Tools
 - **Phase 8**: Ollama Integration
@@ -45,8 +45,7 @@
 - `app/logging/formatters.py` has 0% coverage (utility module, unused by current tests). To be addressed in Phase 21 (Observability).
 - Playwright live browser integration tests deferred to Phase 2+ CI integration test job.
 
-## Next Phase Goals (Phase 5: ESCO Normalization & Taxonomy Integration)
-1. Set up ESCO Taxonomy dataset files and model loader.
-2. Implement semantic search & mapping using sentence-transformers to map extracted skills to canonical ESCO terms.
-3. Wire normalizer service to map skills, seniority levels, and requirements classifications.
-4. Update API contracts and run validation checks.
+## Next Phase Goals (Phase 6: Review Workflows & Review Queue)
+1. Design state machine/workflow for the review queue.
+2. Implement front-end review components or APIs.
+3. Manage transitions for jobs flagged for human review.
