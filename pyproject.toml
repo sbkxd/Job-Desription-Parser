@@ -72,6 +72,9 @@ ignore = ["E501"]  # Line length enforced by Black
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["E501"]
 
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = ["fastapi.Depends", "fastapi.params.Depends", "Depends", "fastapi.Query", "Query"]
+
 [tool.black]
 line-length = 88
 target-version = ['py311']
