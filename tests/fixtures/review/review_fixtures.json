@@ -1,0 +1,47 @@
+[
+  {
+    "raw_skill": "Spark",
+    "normalized_skill": "Apache Spark",
+    "esco_id": "esco_apache_spark",
+    "confidence": 0.78,
+    "match_method": "fuzzy",
+    "expected_status": "pending",
+    "expected_reason": "REVIEW_RECOMMENDED"
+  },
+  {
+    "raw_skill": "Spring",
+    "normalized_skill": "Spring Framework",
+    "esco_id": "esco_spring_framework",
+    "confidence": 0.72,
+    "match_method": "embedding",
+    "expected_status": "pending",
+    "expected_reason": "REVIEW_REQUIRED"
+  },
+  {
+    "raw_skill": "LangChain",
+    "normalized_skill": null,
+    "esco_id": "unmapped",
+    "confidence": 0.0,
+    "match_method": "none",
+    "expected_status": "pending",
+    "expected_reason": "OUT_OF_TAXONOMY"
+  },
+  {
+    "raw_skill": "CrewAI",
+    "normalized_skill": null,
+    "esco_id": "unmapped",
+    "confidence": 0.0,
+    "match_method": "none",
+    "expected_status": "pending",
+    "expected_reason": "OUT_OF_TAXONOMY"
+  },
+  {
+    "raw_skill": "Postgres",
+    "normalized_skill": "PostgreSQL",
+    "esco_id": "esco_postgresql",
+    "confidence": 0.95,
+    "match_method": "alias",
+    "expected_status": "approved",
+    "expected_reason": "AUTO_APPROVED"
+  }
+]
