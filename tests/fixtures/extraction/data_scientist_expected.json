@@ -1,0 +1,49 @@
+{
+  "skills": [
+    {
+      "name": "Data Science",
+      "confidence": 0.95,
+      "section": "requirements"
+    },
+    {
+      "name": "NumPy",
+      "confidence": 0.95,
+      "section": "nice_to_have"
+    },
+    {
+      "name": "Pandas",
+      "confidence": 0.95,
+      "section": "nice_to_have"
+    },
+    {
+      "name": "Python",
+      "confidence": 0.95,
+      "section": "responsibilities"
+    }
+  ],
+  "experience": {
+    "min_years": 5.0,
+    "max_years": null
+  },
+  "seniority": {
+    "seniority": "Senior",
+    "confidence": 0.95
+  },
+  "requirements_classification": [
+    {
+      "text": "At least 5 years of data science experience.",
+      "classification": "Required",
+      "confidence": 0.95
+    },
+    {
+      "text": "Degree in statistics or math is essential.",
+      "classification": "Required",
+      "confidence": 0.95
+    },
+    {
+      "text": "Experience with Pandas and NumPy is nice to have.",
+      "classification": "Optional",
+      "confidence": 0.95
+    }
+  ]
+}

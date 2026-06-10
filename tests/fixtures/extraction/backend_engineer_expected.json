@@ -1,0 +1,44 @@
+{
+  "skills": [
+    {
+      "name": "FastAPI",
+      "confidence": 0.95,
+      "section": "responsibilities"
+    },
+    {
+      "name": "Go",
+      "confidence": 0.95,
+      "section": "responsibilities"
+    },
+    {
+      "name": "Kubernetes",
+      "confidence": 0.95,
+      "section": "nice_to_have"
+    },
+    {
+      "name": "REST",
+      "confidence": 0.95,
+      "section": "responsibilities"
+    }
+  ],
+  "experience": {
+    "min_years": 8.0,
+    "max_years": null
+  },
+  "seniority": {
+    "seniority": "Principal",
+    "confidence": 0.95
+  },
+  "requirements_classification": [
+    {
+      "text": "minimum 8 years experience is required.",
+      "classification": "Required",
+      "confidence": 0.95
+    },
+    {
+      "text": "Kubernetes knowledge is bonus.",
+      "classification": "Preferred",
+      "confidence": 0.95
+    }
+  ]
+}

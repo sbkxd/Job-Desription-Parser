@@ -1,0 +1,44 @@
+{
+  "skills": [
+    {
+      "name": "Docker",
+      "confidence": 0.95,
+      "section": "nice_to_have"
+    },
+    {
+      "name": "Java",
+      "confidence": 0.95,
+      "section": "responsibilities"
+    },
+    {
+      "name": "SQL",
+      "confidence": 0.95,
+      "section": "requirements"
+    }
+  ],
+  "experience": {
+    "min_years": 3.0,
+    "max_years": null
+  },
+  "seniority": {
+    "seniority": "Associate",
+    "confidence": 0.95
+  },
+  "requirements_classification": [
+    {
+      "text": "Must have 3+ years of experience.",
+      "classification": "Required",
+      "confidence": 0.95
+    },
+    {
+      "text": "Strong SQL knowledge.",
+      "classification": "Required",
+      "confidence": 0.7
+    },
+    {
+      "text": "Experience with Docker preferred.",
+      "classification": "Preferred",
+      "confidence": 0.95
+    }
+  ]
+}

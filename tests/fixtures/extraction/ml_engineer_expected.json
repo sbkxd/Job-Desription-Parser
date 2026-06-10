@@ -1,0 +1,49 @@
+{
+  "skills": [
+    {
+      "name": "Deep Learning",
+      "confidence": 0.95,
+      "section": "responsibilities"
+    },
+    {
+      "name": "GCP",
+      "confidence": 0.95,
+      "section": "nice_to_have"
+    },
+    {
+      "name": "Machine Learning",
+      "confidence": 0.95,
+      "section": "requirements"
+    },
+    {
+      "name": "PyTorch",
+      "confidence": 0.95,
+      "section": "responsibilities"
+    }
+  ],
+  "experience": {
+    "min_years": 2.0,
+    "max_years": 4.0
+  },
+  "seniority": {
+    "seniority": "Mid",
+    "confidence": 0.7
+  },
+  "requirements_classification": [
+    {
+      "text": "2-4 years of experience.",
+      "classification": "Required",
+      "confidence": 0.7
+    },
+    {
+      "text": "Strong understanding of machine learning models.",
+      "classification": "Required",
+      "confidence": 0.7
+    },
+    {
+      "text": "Experience with GCP is an advantage.",
+      "classification": "Preferred",
+      "confidence": 0.95
+    }
+  ]
+}

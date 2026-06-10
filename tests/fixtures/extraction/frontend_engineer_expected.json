@@ -1,0 +1,39 @@
+{
+  "skills": [
+    {
+      "name": "React",
+      "confidence": 0.95,
+      "section": "responsibilities"
+    },
+    {
+      "name": "Tailwind",
+      "confidence": 0.95,
+      "section": "nice_to_have"
+    },
+    {
+      "name": "TypeScript",
+      "confidence": 0.95,
+      "section": "responsibilities"
+    }
+  ],
+  "experience": {
+    "min_years": 5.0,
+    "max_years": 5.0
+  },
+  "seniority": {
+    "seniority": "Senior",
+    "confidence": 0.95
+  },
+  "requirements_classification": [
+    {
+      "text": "5 years of experience.",
+      "classification": "Required",
+      "confidence": 0.7
+    },
+    {
+      "text": "Tailwind is optional.",
+      "classification": "Optional",
+      "confidence": 0.95
+    }
+  ]
+}
