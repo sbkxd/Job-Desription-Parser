@@ -37,8 +37,10 @@ class RequirementType(str, enum.Enum):
 
 class ReviewStatus(str, enum.Enum):
     PENDING = "pending"
+    IN_REVIEW = "in_review"
     APPROVED = "approved"
     REJECTED = "rejected"
+    CORRECTED = "corrected"
 
 
 class Job(Base):
