@@ -8,6 +8,7 @@ import numpy as np
 # and CPU/GPU device selection config.
 from sentence_transformers import SentenceTransformer
 
+from app.normalization.loaders.custom_taxonomy_loader import CustomTaxonomyLoader
 from app.normalization.loaders.taxonomy_loader import TaxonomyLoader
 from app.normalization.schemas.schemas import EscoSkill
 
@@ -24,11 +25,16 @@ class TaxonomyRepository:
             cls._instance._initialized = False
         return cls._instance
 
-    def __init__(self, loader: TaxonomyLoader | None = None) -> None:
+    def __init__(
+        self,
+        loader: TaxonomyLoader | None = None,
+        custom_loader: CustomTaxonomyLoader | None = None,
+    ) -> None:
         if self._initialized:
             return
 
         self.loader = loader or TaxonomyLoader()
+        self.custom_loader = custom_loader or CustomTaxonomyLoader()
         self.skills: list[EscoSkill] = []
 
         # In-memory indexes
@@ -47,6 +53,10 @@ class TaxonomyRepository:
         """Load taxonomy data and build search indexes."""
         # 1. Load taxonomy dataset
         self.skills = self.loader.load()
+
+        # Load custom taxonomy extensions
+        custom_skills = self.custom_loader.load()
+        self.skills.extend(custom_skills)
 
         # 2. Build Exact and Alias indexes
         for skill in self.skills:

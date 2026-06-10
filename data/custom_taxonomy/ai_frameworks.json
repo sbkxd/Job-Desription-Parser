@@ -1,0 +1,16 @@
+[
+  {
+    "skill": "LangChain",
+    "category": "AI Framework",
+    "aliases": [
+      "langchain"
+    ]
+  },
+  {
+    "skill": "CrewAI",
+    "category": "AI Agents Framework",
+    "aliases": [
+      "crewai"
+    ]
+  }
+]
