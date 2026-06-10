@@ -2,6 +2,7 @@
 
 from fastapi import APIRouter
 
+from app.api.v1.endpoints.extraction import router as extraction_router
 from app.api.v1.endpoints.health import router as health_router
 from app.api.v1.endpoints.preprocessing import router as preprocessing_router
 
@@ -10,3 +11,4 @@ api_router.include_router(health_router, prefix="/health", tags=["Health"])
 api_router.include_router(
     preprocessing_router, prefix="/preprocess", tags=["Preprocessing"]
 )
+api_router.include_router(extraction_router, prefix="/extract", tags=["Extraction"])
