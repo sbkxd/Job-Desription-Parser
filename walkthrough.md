@@ -50,6 +50,26 @@
   - Graceful degradation when Playwright is not installed.
   - Never raises — all errors captured in `PlaywrightResult.error`.
 
+### Phase 3: Preprocessing & JD Segmentation
+- **Preprocessing Schemas** (`app/preprocessing/schemas/schemas.py`):
+  - `SectionType` enum: `responsibilities`, `requirements`, `nice_to_have`, `about_company`, `benefits`, `other`.
+  - `BoilerplateCategory` enum: `equal_opportunity`, `legal_disclaimer`, `privacy_statement`, `application_instructions`, `recruitment_marketing`, `generic_policy`.
+  - `RawDocument`, `BoilerplateBlock`, `Section`, `SegmentedDocument`, `SegmentationResult` schemas.
+- **Text Cleaning Pipeline** (`app/preprocessing/cleaners/text_cleaner.py`):
+  - 9-step deterministic transformations normalizing whitespace, line-endings, and HTML entities.
+  - Standardizes various unicode bullet characters to hyphenated prefix (`- `) while preserving indents.
+- **Boilerplate Detection** (`app/preprocessing/classifiers/boilerplate_detector.py`):
+  - Scans 50+ patterns across 6 categories. Removes boilerplate lines and preserves them for auditing.
+- **Heading Detector & Normalizer** (`app/preprocessing/normalizers/heading_normalizer.py` & `app/preprocessing/segmenters/heading_detector.py`):
+  - Classifies headings using an alias dictionary, RapidFuzz fuzzy matches, and structural heuristics.
+- **Section Segmenter & Classifier** (`app/preprocessing/classifiers/section_classifier.py` & `app/preprocessing/segmenters/section_segmenter.py`):
+  - Segments lines at heading boundaries. Classifies sections based on heading type and bag-of-words keyword rules.
+- **Segmentation Service** (`app/preprocessing/services/segmentation_service.py`):
+  - Orchestrates cleaning, boilerplate detection, and classification. Logs timing and outputs results.
+- **Few-Shot Prompt Skill File** (`skills/segment_jd.md`):
+  - Few-shot examples and parsing rules for LLMs.
+
+
 ## Why It Exists
 - The settings module ensures the application fails fast if configuration is missing.
 - Structured JSON logging provides machine-readable records for cloud environments.
@@ -66,6 +86,14 @@
 4. Otherwise → `RequestsFetcher.fetch(url)` (sync).
 5. Raw HTML is passed to `TrafilaturaParser.parse(html, url)` → `ParseResult`.
 6. `FetchedDocument` is assembled from parse results and metadata.
+
+### Preprocessing & Segmentation Pipeline
+1. `RawDocument` text is normalized and cleaned via `TextCleaner`.
+2. Cleaned text lines are evaluated for boilerplate via `BoilerplateDetector`. Matches are quarantined.
+3. Remaining clean lines are segmented into raw sections on heading boundaries via `SectionSegmenter` using the `HeadingDetector` rules.
+4. Each raw section is classified into a canonical `SectionType` and scored with a confidence score in `[0.0, 1.0]` by the `SectionClassifier`.
+5. The `SegmentedDocument` is wrapped in a `SegmentationResult` and returned.
+
 
 ### Configure Logging
 - `app/logging/logger.py`: `configure_logging(log_level?, json_logs?)` sets up structlog with environment-aware renderer.
@@ -97,6 +125,7 @@ docker compose up db -d
 ### API Endpoints Available
 - `GET /api/v1/health/live` — Liveness probe
 - `GET /api/v1/health/ready` — Readiness probe (checks DB)
+- `POST /api/v1/preprocess/segment` — Preprocesses and segments raw JD text
 - `GET /docs` — Swagger UI
 - `GET /redoc` — ReDoc UI
 
@@ -114,17 +143,14 @@ Run quality checks:
 .venv\Scripts\python -m mypy app/
 ```
 
-### Test Coverage Summary (Phase 2 Complete)
+### Test Coverage Summary (Phase 3 Complete)
 | Module | Coverage |
 |--------|----------|
 | `app/config/` | 100% |
-| `app/database/` | 93% |
-| `app/logging/` | 93% |
+| `app/database/` | 84% |
+| `app/logging/` | 94% |
 | `app/models/models.py` | 100% |
-| `app/repositories/base.py` | 100% |
-| `app/ingestion/schemas/` | 100% |
-| `app/ingestion/detectors/` | 83% |
-| `app/ingestion/fetchers/requests_fetcher.py` | 100% |
-| `app/ingestion/parsers/trafilatura_parser.py` | 83% |
-| `app/ingestion/fetchers/playwright_fetcher.py` | 54% (live browser paths excluded) |
-| **Total** | **89%** |
+| `app/repositories/` | 83% |
+| `app/ingestion/` | 74% (Playwright live paths mocked) |
+| `app/preprocessing/` | 98% |
+| **Total** | **92%** |

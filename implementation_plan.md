@@ -1,20 +1,20 @@
 # Implementation Plan - JD Skill Extraction Pipeline
 
 ## Current Phase
-- **Phase 3**: Configuration Layer
+- **Phase 4**: Configuration Layer (next)
 
 ## Completed Phases
 - **Phase 0**: Repository Initialization
 - **Phase 1**: Environment Setup & Infrastructure
 - **Phase 2**: CI/CD Foundation & Ingestion Framework
+- **Phase 3**: Preprocessing & JD Segmentation
 
 ## Remaining Phases
-- **Phase 3**: Configuration Layer (next)
-- **Phase 4**: Database Layer
-- **Phase 5**: Domain Models
-- **Phase 6**: Ingestion Framework (advanced)
-- **Phase 7**: Fetcher Implementations (advanced)
-- **Phase 8**: Preprocessing Pipeline
+- **Phase 4**: Configuration Layer
+- **Phase 5**: Database Layer
+- **Phase 6**: Domain Models
+- **Phase 7**: Ingestion Framework (advanced)
+- **Phase 8**: Fetcher Implementations (advanced)
 - **Phase 9**: Skill Framework
 - **Phase 10**: NER Infrastructure
 - **Phase 11**: Skill Extraction
@@ -62,7 +62,7 @@
 - `app/logging/formatters.py` has 0% coverage (utility module, unused by current tests). To be addressed in Phase 21 (Observability).
 - Playwright live browser integration tests deferred to Phase 2+ CI integration test job.
 
-## Next Phase Goals (Phase 3: Configuration Layer)
+## Next Phase Goals (Phase 4: Configuration Layer)
 1. Implement advanced configuration management for NLP model paths, ESCO taxonomy file paths, and pipeline tuning parameters.
 2. Add environment-based feature flags (enable/disable playwright, ESCO matching, etc.).
 3. Write corresponding unit tests for all new configuration surface area.

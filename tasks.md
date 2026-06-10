@@ -1,12 +1,11 @@
 # Tasks - JD Skill Extraction Pipeline
 
 ## Pending
-- **Phase 3**: Configuration Layer
-- **Phase 4**: Database Layer
-- **Phase 5**: Domain Models
-- **Phase 6**: Ingestion Framework (advanced)
-- **Phase 7**: Fetcher Implementations (advanced)
-- **Phase 8**: Preprocessing Pipeline
+- **Phase 4**: Configuration Layer
+- **Phase 5**: Database Layer
+- **Phase 6**: Domain Models
+- **Phase 7**: Ingestion Framework (advanced)
+- **Phase 8**: Fetcher Implementations (advanced)
 - **Phase 9**: Skill Framework
 - **Phase 10**: NER Infrastructure
 - **Phase 11**: Skill Extraction
@@ -56,3 +55,15 @@
   - [x] Milestone 2.6: Unit tests for all ingestion components (≥ 80 new tests, 156 total, 89% coverage)
   - [x] Milestone 2.7: MyPy clean, Ruff clean, Black clean across all app/ modules
   - [x] Documentation update (tasks.md, implementation_plan.md, architecture.md, walkthrough.md, intent_matrix_results.md, CHANGELOG.md)
+- **Phase 3: Preprocessing & JD Segmentation**
+  - [x] Milestone 3.1: Preprocessing Schemas (SectionType, BoilerplateCategory, RawDocument, BoilerplateBlock, Section, SegmentedDocument, SegmentationResult)
+  - [x] Milestone 3.2: Text Cleaning Pipeline (TextCleaner with 9 deterministic steps, bullet/number list handling, indentation preservation)
+  - [x] Milestone 3.3: Content Normalization (HeadingNormalizer mapping heading surface forms to SectionType)
+  - [x] Milestone 3.4: Boilerplate Detection (BoilerplateDetector identifying and quarantining legal/EEO/marketing disclaimers)
+  - [x] Milestone 3.5: Heading Detection Engine (HeadingDetector with exact, fuzzy, and structural heuristics)
+  - [x] Milestone 3.6: Rule-Based Section Segmenter (SectionSegmenter splitting lines into raw sections on heading boundaries)
+  - [x] Milestone 3.7: Section Classification Engine (SectionClassifier scoring sections using heading type and keyword content rules)
+  - [x] Milestone 3.8: Segmentation Orchestrator Service (SegmentationService running orchestrations and timing runs)
+  - [x] Milestone 3.9: segment_jd.md Skill File (Few-shot samples and rules for AI models under skills/segment_jd.md)
+  - [x] Milestone 3.10: Preprocessing API Endpoint (POST /api/v1/preprocess/segment)
+  - [x] Milestone 3.11: Segmentation Fixture Dataset & Tests (6 real-world samples under tests/fixtures/segmentation/ and unit tests with 92% coverage)

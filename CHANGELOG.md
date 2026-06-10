@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-06-10
+
+### Added
+- Milestone 3.1: Preprocessing schemas (`app/preprocessing/schemas/schemas.py`) defining `SectionType`, `BoilerplateCategory`, `RawDocument`, `BoilerplateBlock`, `Section`, `SegmentedDocument`, and `SegmentationResult`.
+- Milestone 3.2: Text Cleaning Pipeline (`app/preprocessing/cleaners/text_cleaner.py`) with 9 deterministic steps, smart quotes replacement, asterisk/dash bullet unification, and indent preservation.
+- Milestone 3.3: Content Normalization alias resolution in `HeadingNormalizer` mapping raw headings to SectionType.
+- Milestone 3.4: Boilerplate Detection (`app/preprocessing/classifiers/boilerplate_detector.py`) scanning 50+ patterns across 6 legal/marketing categories and tracking quarantined blocks.
+- Milestone 3.5: Heading Detection Engine (`app/preprocessing/segmenters/heading_detector.py`) using exact alias, fuzzy match, and structural heuristics.
+- Milestone 3.6: Section Segmenter (`app/preprocessing/segmenters/section_segmenter.py`) splitting lines at heading boundaries.
+- Milestone 3.7: Section Classifier (`app/preprocessing/classifiers/section_classifier.py`) scoring content keywords combined with heading confidence.
+- Milestone 3.8: Segmentation Service (`app/preprocessing/services/segmentation_service.py`) orchestrating and logging runs.
+- Milestone 3.9: segment_jd.md Skill File (`skills/segment_jd.md`) few-shot prompts and rules.
+- Milestone 3.10: Preprocessing API Endpoint (`POST /api/v1/preprocess/segment`).
+- Milestone 3.11: 6 real-world input/expected fixture pairs and unit test suite achieving 92% overall project coverage.
+
+### Fixed
+- Fixed bug in `TextCleaner._collapse_horizontal_whitespace` which collapsed leading indentation spaces.
+- Added dynamic suffix/prefix matching in normalizer for headings starting with "About ".
+- Added "skills" alone mapping to REQUIREMENTS SectionType.
+
 ## [0.3.0] - 2026-06-10
 
 ### Added
