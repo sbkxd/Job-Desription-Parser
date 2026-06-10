@@ -17,7 +17,7 @@ class SkillRepository(SQLAlchemyRepository[Skill]):
 
     async def get_by_name(self, name: str) -> Skill | None:
         """Retrieve a skill by its canonical name (case-insensitive)."""
-        stmt = select(Skill).where(Skill.name.ilike(name))  # type: ignore[attr-defined]
+        stmt = select(Skill).where(Skill.name.ilike(name))
         result = await self._session.execute(stmt)
         return result.scalar_one_or_none()
 

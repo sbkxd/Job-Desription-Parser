@@ -1,5 +1,6 @@
 import logging
 import sys
+from typing import Any, cast
 
 import structlog
 
@@ -7,12 +8,30 @@ from app.config.environment import AppEnv
 from app.config.settings import settings
 
 
-def configure_logging() -> None:
-    # Set standard logging level
-    log_level = getattr(logging, settings.LOG_LEVEL.upper(), logging.INFO)
+def configure_logging(
+    log_level: str | None = None,
+    json_logs: bool | None = None,
+) -> None:
+    """Configure structlog and standard logging.
+
+    Args:
+        log_level: Override the log level from settings (e.g. 'INFO', 'DEBUG').
+        json_logs: Override whether to emit JSON logs (True) or console logs (False).
+                   Defaults to False for LOCAL environment, True otherwise.
+    """
+    # Resolve level
+    level_name: str = log_level or settings.LOG_LEVEL
+    level: int = getattr(logging, level_name.upper(), logging.INFO)
+
+    # Resolve JSON flag
+    use_json: bool
+    if json_logs is not None:
+        use_json = json_logs
+    else:
+        use_json = settings.APP_ENV != AppEnv.LOCAL
 
     # Define structlog processors
-    shared_processors = [
+    shared_processors: list[Any] = [
         structlog.contextvars.merge_contextvars,
         structlog.processors.add_log_level,
         structlog.processors.TimeStamper(fmt="iso"),
@@ -21,7 +40,8 @@ def configure_logging() -> None:
     ]
 
     # Select formatter/renderer based on environment
-    if settings.APP_ENV == AppEnv.LOCAL:
+    renderer: Any
+    if not use_json:
         # Development environment: clean colored logs
         renderer = structlog.dev.ConsoleRenderer(colors=True)
     else:
@@ -51,7 +71,7 @@ def configure_logging() -> None:
 
     root_logger = logging.getLogger()
     root_logger.handlers = [handler]
-    root_logger.setLevel(log_level)
+    root_logger.setLevel(level)
 
     # Prevent logs from standard libraries from drowning out app logs
     logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
@@ -62,4 +82,4 @@ configure_logging()
 
 
 def get_logger(name: str) -> structlog.stdlib.BoundLogger:
-    return structlog.get_logger(name)
+    return cast(structlog.stdlib.BoundLogger, structlog.get_logger(name))

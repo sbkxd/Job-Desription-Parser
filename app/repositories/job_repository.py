@@ -33,7 +33,7 @@ class JobRepository(SQLAlchemyRepository[Job]):
             .where(Job.status == status)
             .limit(limit)
             .offset(offset)
-            .order_by(Job.created_at.desc())  # type: ignore[attr-defined]
+            .order_by(Job.created_at.desc())
         )
         result = await self._session.execute(stmt)
         return list(result.scalars().all())
@@ -42,9 +42,9 @@ class JobRepository(SQLAlchemyRepository[Job]):
         """Retrieve jobs flagged for human review."""
         stmt = (
             select(Job)
-            .where(Job.review_required.is_(True))  # type: ignore[attr-defined]
+            .where(Job.review_required.is_(True))
             .limit(limit)
-            .order_by(Job.created_at.asc())  # type: ignore[attr-defined]
+            .order_by(Job.created_at.asc())
         )
         result = await self._session.execute(stmt)
         return list(result.scalars().all())
