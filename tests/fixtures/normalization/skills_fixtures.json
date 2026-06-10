@@ -1,0 +1,47 @@
+[
+  {
+    "raw_skill": "python",
+    "expected_normalized": "Python",
+    "expected_esco_id": "esco_python"
+  },
+  {
+    "raw_skill": "ReactJS",
+    "expected_normalized": "React",
+    "expected_esco_id": "esco_react"
+  },
+  {
+    "raw_skill": "Tensor Flow",
+    "expected_normalized": "TensorFlow",
+    "expected_esco_id": "esco_tensorflow"
+  },
+  {
+    "raw_skill": "Postgres",
+    "expected_normalized": "PostgreSQL",
+    "expected_esco_id": "esco_postgresql"
+  },
+  {
+    "raw_skill": "Deep Learning Models",
+    "expected_normalized": "Deep Learning",
+    "expected_esco_id": "esco_deep_learning"
+  },
+  {
+    "raw_skill": "Google Cloud Platform",
+    "expected_normalized": "GCP",
+    "expected_esco_id": "esco_gcp"
+  },
+  {
+    "raw_skill": "Docker",
+    "expected_normalized": "Docker",
+    "expected_esco_id": "esco_docker"
+  },
+  {
+    "raw_skill": "K8s",
+    "expected_normalized": "Kubernetes",
+    "expected_esco_id": "esco_kubernetes"
+  },
+  {
+    "raw_skill": "UnknownTechSkill",
+    "expected_normalized": "UnknownTechSkill",
+    "expected_esco_id": "unmapped"
+  }
+]
