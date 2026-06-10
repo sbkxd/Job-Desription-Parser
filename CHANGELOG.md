@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-06-10
+
+### Added
+- Milestone 4.1: Extraction Schemas defining Pydantic v2 schemas (`SkillMention`, `ExperienceRequirement`, `SeniorityLevel`, `RequirementClassification`, `ExtractionResult`).
+- Milestone 4.2: Model Management Layer (`ModelManager` & `DebertaLoader`) for lazy-loading DeBERTa models.
+- Milestone 4.3 & 4.4: Skill Extraction & Post-processing combining Gazetteer and DeBERTa NER, sorting/deduplicating listings.
+- Milestone 4.5: Experience Extraction regex rule parsing for numeric minimum/maximum bounds.
+- Milestone 4.6: Seniority Extraction scan title keywords and experience fallback rules.
+- Milestone 4.7: Requirement Classification deterministic rules for Required, Preferred, Optional.
+- Milestone 4.8: Extraction Service coordinating downstream extraction.
+- Milestone 4.9: Skill documents (`skills/extract_skills.md`, `skills/classify_requirement.md`).
+- Milestone 4.10: Extraction API endpoint (`POST /api/v1/extract`).
+- Milestone 4.11: 5 Representative input/expected JSON datasets under `tests/fixtures/extraction/` and unit/integration test suites.
+
+### Fixed
+- Fixed seniority experience fallback mapping to classify experience >= 2.0 as "Mid".
+- Restructured `SeniorityExtractor.extract` into helper methods to reduce complexity from 21 to 10 (C901).
+- Swapped deprecated `example` argument in Pydantic `Field` for `json_schema_extra`.
+
 ## [0.4.0] - 2026-06-10
 
 ### Added

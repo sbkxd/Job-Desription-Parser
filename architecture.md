@@ -48,6 +48,18 @@ graph TD
 | `SectionClassifier` | `app.preprocessing.classifiers.section_classifier` | Classifies sections using heading categories and bag-of-words keyword scoring. |
 | `SegmentationService` | `app.preprocessing.services.segmentation_service` | Orchestrates the entire pipeline, records execution metadata/timing, and emits `SegmentationResult`. |
 
+### Information Extraction Engine (Phase 4)
+| Component | Module | Responsibility |
+|-----------|--------|----------------|
+| `SkillMention` / `ExtractionResult` | `app.extraction.schemas.schemas` | Pydantic v2 schemas for skill mentions, experience, seniority, and classifications. |
+| `ModelManager` | `app.extraction.models.model_manager` | Singleton caching manager for lazy-loaded NLP/NER pipelines. |
+| `DebertaLoader` | `app.extraction.models.deberta_loader` | Lazy load infrastructure for token classification model with fallback options. |
+| `SkillsExtractor` | `app.extraction.skills.skills_extractor` | Dual-path skills extractor combining regex Gazetteer (high precision) with DeBERTa-v3 NER (high recall). |
+| `ExperienceExtractor` | `app.extraction.experience.experience_extractor` | Regex rule engine parsing years of experience range (min, max, exact). |
+| `SeniorityExtractor` | `app.extraction.seniority.seniority_extractor` | Title string scanner and experience years fallback mapping. |
+| `RequirementClassifier` | `app.extraction.requirements.requirement_classifier` | Classifies requirements into Required, Preferred, or Optional. |
+| `ExtractionService` | `app.extraction.services.extraction_service` | Orchestrates the extractors and runs validation checks. |
+
 ## Data Flow
 ```mermaid
 sequenceDiagram
@@ -183,3 +195,5 @@ graph LR
 | BeautifulSoup last-resort fallback | Ensures _something_ is returned even from heavily obfuscated pages. |
 | `FetchedDocument.to_output()` contract | Normalizes all fetcher types into a single dict shape for downstream pipeline stages. |
 | SourceType enum as string enum | String values enable JSON serialization without extra transformations. |
+| DeBERTa-v3 + Gazetteer dual skill extraction | Regex gazetteer catches exact tech names (e.g. C++, Python) reliably; DeBERTa identifies long-tail/contextual skills. |
+| Deterministic experience & requirement classifiers | Initial rules ensure predictability and correctness before scaling up to LLMs. |

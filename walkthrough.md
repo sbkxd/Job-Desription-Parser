@@ -69,6 +69,26 @@
 - **Few-Shot Prompt Skill File** (`skills/segment_jd.md`):
   - Few-shot examples and parsing rules for LLMs.
 
+### Phase 4: Information Extraction Engine
+- **Extraction Domain Schemas** (`app/extraction/schemas/schemas.py`):
+  - `SkillMention`, `ExperienceRequirement`, `SeniorityLevel`, `RequirementClassification`, and `ExtractionResult` using Pydantic v2.
+- **Model Management & DeBERTa Loader** (`app/extraction/models/`):
+  - `ModelManager` and `DebertaLoader` providing lazy-loading, singleton instantiation, CPU/GPU detection, caching, and clean lifecycle management.
+- **Skills Extraction Engine** (`app/extraction/skills/skills_extractor.py`):
+  - Dual-path skill extractor blending a regex Gazetteer (high precision) and DeBERTa-v3 NER model (high recall) for flexible detection. Includes post-processing logic (deduplication, casing resolution, and punctuation cleaning).
+- **Experience Extraction Engine** (`app/extraction/experience/experience_extractor.py`):
+  - Regular expression parser extracting experience bounds (`min_years` and `max_years`) handling plus notations, exact numbers, and ranges.
+- **Seniority Extraction Engine** (`app/extraction/seniority/seniority_extractor.py`):
+  - Classifier using title keyword checks, body text matching, and experience years fallback mapping.
+- **Requirement Classifier** (`app/extraction/requirements/requirement_classifier.py`):
+  - Deterministic rules identifying whether a sentence dictates a `Required`, `Preferred`, or `Optional` qualification.
+- **Extraction Orchestrator** (`app/extraction/services/extraction_service.py`):
+  - Orchestrator (`ExtractionService`) compiling outputs into a unified `ExtractionResult`.
+- **Extraction Endpoint** (`POST /api/v1/extract`):
+  - REST endpoint to trigger the information extraction pipeline.
+- **Few-Shot Prompt Skill Files** (`skills/extract_skills.md` & `skills/classify_requirement.md`):
+  - System prompts and rules for model evaluation.
+
 
 ## Why It Exists
 - The settings module ensures the application fails fast if configuration is missing.
@@ -76,6 +96,8 @@
 - The dual-fetcher strategy handles both static ATS pages (cheaper) and JS-rendered boards (richer, required for Greenhouse/Lever/Workable).
 - Trafilatura's content heuristics strip navigation, ads, and boilerplate — ideal for job descriptions.
 - `FetchedDocument.to_output()` provides a stable contract for future NLP pipeline stages.
+- Dual-path skills extraction ensures exact-match technical words (e.g. C++) are caught via Gazetteer, while long-tail terms are discovered by the NER classifier.
+- Rule-based experience, seniority, and requirement classifiers provide stable baseline logic before LLM integrations.
 
 ## How It Works
 
@@ -93,6 +115,14 @@
 3. Remaining clean lines are segmented into raw sections on heading boundaries via `SectionSegmenter` using the `HeadingDetector` rules.
 4. Each raw section is classified into a canonical `SectionType` and scored with a confidence score in `[0.0, 1.0]` by the `SectionClassifier`.
 5. The `SegmentedDocument` is wrapped in a `SegmentationResult` and returned.
+
+### Information Extraction Pipeline
+1. `segmented_document` sections are fed into the orchestrator.
+2. `SkillsExtractor` identifies raw skill mentions from responsibilities/requirements/nice-to_have sections, merges overlapping spans, resolves casings, and deduplicates them.
+3. `ExperienceExtractor` parses years of experience bounds from requirements sections.
+4. `SeniorityExtractor` evaluates title patterns and falls back to experience-years mapping.
+5. `RequirementClassifier` maps requirement sentences to `Required`/`Preferred`/`Optional`.
+6. Output is validated and compiled into an `ExtractionResult` Pydantic payload.
 
 
 ### Configure Logging
@@ -126,6 +156,7 @@ docker compose up db -d
 - `GET /api/v1/health/live` — Liveness probe
 - `GET /api/v1/health/ready` — Readiness probe (checks DB)
 - `POST /api/v1/preprocess/segment` — Preprocesses and segments raw JD text
+- `POST /api/v1/extract` — Extracts structured skills, experience, seniority, and requirement types
 - `GET /docs` — Swagger UI
 - `GET /redoc` — ReDoc UI
 
@@ -143,14 +174,15 @@ Run quality checks:
 .venv\Scripts\python -m mypy app/
 ```
 
-### Test Coverage Summary (Phase 3 Complete)
+### Test Coverage Summary (Phase 4 Complete)
 | Module | Coverage |
 |--------|----------|
 | `app/config/` | 100% |
-| `app/database/` | 84% |
-| `app/logging/` | 94% |
+| `app/database/` | 92% |
+| `app/logging/` | 95% |
 | `app/models/models.py` | 100% |
 | `app/repositories/` | 83% |
-| `app/ingestion/` | 74% (Playwright live paths mocked) |
-| `app/preprocessing/` | 98% |
+| `app/ingestion/` | 82% (Playwright live paths mocked) |
+| `app/preprocessing/` | 94% |
+| `app/extraction/` | 91% |
 | **Total** | **92%** |

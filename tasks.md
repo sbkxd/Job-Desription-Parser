@@ -1,31 +1,13 @@
 # Tasks - JD Skill Extraction Pipeline
 
 ## Pending
-- **Phase 4**: Configuration Layer
-- **Phase 5**: Database Layer
-- **Phase 6**: Domain Models
-- **Phase 7**: Ingestion Framework (advanced)
-- **Phase 8**: Fetcher Implementations (advanced)
-- **Phase 9**: Skill Framework
-- **Phase 10**: NER Infrastructure
-- **Phase 11**: Skill Extraction
-- **Phase 12**: Experience Extraction
-- **Phase 13**: Seniority Extraction
-- **Phase 14**: Requirement Classification
-- **Phase 15**: ESCO Taxonomy Integration
-- **Phase 16**: Normalization Engine
-- **Phase 17**: Review Queue
-- **Phase 18**: MCP Server
-- **Phase 19**: Orchestration Layer
-- **Phase 20**: REST APIs
-- **Phase 21**: Observability
-- **Phase 22**: Security
-- **Phase 23**: Dockerization
-- **Phase 24**: Documentation
-- **Phase 25**: Cloud Readiness
-- **Phase 26**: Performance Testing
-- **Phase 27**: Production Hardening
-- **Phase 28**: Final Release
+- **Phase 5**: ESCO Normalization & Taxonomy Integration
+- **Phase 6**: Review Workflows & Review Queue
+- **Phase 7**: MCP Tools
+- **Phase 8**: Ollama Integration
+- **Phase 9**: Deployment Enhancements & Cloud Readiness
+- **Phase 10**: Observability, Security & Dockerization
+- **Phase 11**: Production Hardening & Final Release
 
 ## In Progress
 *None*
@@ -34,6 +16,19 @@
 *None*
 
 ## Completed
+- **Phase 4: Information Extraction Engine**
+  - [x] Milestone 4.1: Extraction Schemas (Pydantic v2 domain schemas)
+  - [x] Milestone 4.2: Model Management Layer (lazy-loading DeBERTa-v3-small infrastructure)
+  - [x] Milestone 4.3: Skill Extraction Engine (NER inference pipeline + gazetteer mapping)
+  - [x] Milestone 4.4: Skill Post-Processing (deduplication, span merging, casing)
+  - [x] Milestone 4.5: Experience Extraction (min/max years parser rules)
+  - [x] Milestone 4.6: Seniority Extraction (title matching + experience mapping fallback)
+  - [x] Milestone 4.7: Requirement Classification (Required, Preferred, Optional rules)
+  - [x] Milestone 4.8: Extraction Orchestrator (Orchestrated ExtractionService pipeline)
+  - [x] Milestone 4.9: Skill Files (skills/extract_skills.md and skills/classify_requirement.md)
+  - [x] Milestone 4.10: Extraction API (POST /api/v1/extract HTTP endpoint)
+  - [x] Milestone 4.11: Extraction Dataset & Unit/Integration Tests (Fixtures and test suites passing)
+- **Phase 3: Preprocessing & JD Segmentation**
 - **Phase 0**: Repository Initialization
 - **Phase 1: Environment Setup & Infrastructure**
   - [x] Milestone 1.1: Development Tooling

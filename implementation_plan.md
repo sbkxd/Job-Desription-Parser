@@ -1,40 +1,23 @@
 # Implementation Plan - JD Skill Extraction Pipeline
 
 ## Current Phase
-- **Phase 4**: Configuration Layer (next)
+- **Phase 5**: ESCO Normalization & Taxonomy Integration (next)
 
 ## Completed Phases
 - **Phase 0**: Repository Initialization
 - **Phase 1**: Environment Setup & Infrastructure
 - **Phase 2**: CI/CD Foundation & Ingestion Framework
 - **Phase 3**: Preprocessing & JD Segmentation
+- **Phase 4**: Information Extraction Engine
 
 ## Remaining Phases
-- **Phase 4**: Configuration Layer
-- **Phase 5**: Database Layer
-- **Phase 6**: Domain Models
-- **Phase 7**: Ingestion Framework (advanced)
-- **Phase 8**: Fetcher Implementations (advanced)
-- **Phase 9**: Skill Framework
-- **Phase 10**: NER Infrastructure
-- **Phase 11**: Skill Extraction
-- **Phase 12**: Experience Extraction
-- **Phase 13**: Seniority Extraction
-- **Phase 14**: Requirement Classification
-- **Phase 15**: ESCO Taxonomy Integration
-- **Phase 16**: Normalization Engine
-- **Phase 17**: Review Queue
-- **Phase 18**: MCP Server
-- **Phase 19**: Orchestration Layer
-- **Phase 20**: REST APIs
-- **Phase 21**: Observability
-- **Phase 22**: Security
-- **Phase 23**: Dockerization
-- **Phase 24**: Documentation
-- **Phase 25**: Cloud Readiness
-- **Phase 26**: Performance Testing
-- **Phase 27**: Production Hardening
-- **Phase 28**: Final Release
+- **Phase 5**: ESCO Normalization & Taxonomy Integration
+- **Phase 6**: Review Workflows & Review Queue
+- **Phase 7**: MCP Tools
+- **Phase 8**: Ollama Integration
+- **Phase 9**: Deployment Enhancements & Cloud Readiness
+- **Phase 10**: Observability, Security & Dockerization
+- **Phase 11**: Production Hardening & Final Release
 
 ## Key Decisions
 1. **Ingestion Framework placed in Phase 2**: Source detection, fetchers (Requests + Playwright), content extraction (Trafilatura) and ingestion schemas were implemented alongside CI/CD to validate the full pipeline early.
@@ -62,7 +45,8 @@
 - `app/logging/formatters.py` has 0% coverage (utility module, unused by current tests). To be addressed in Phase 21 (Observability).
 - Playwright live browser integration tests deferred to Phase 2+ CI integration test job.
 
-## Next Phase Goals (Phase 4: Configuration Layer)
-1. Implement advanced configuration management for NLP model paths, ESCO taxonomy file paths, and pipeline tuning parameters.
-2. Add environment-based feature flags (enable/disable playwright, ESCO matching, etc.).
-3. Write corresponding unit tests for all new configuration surface area.
+## Next Phase Goals (Phase 5: ESCO Normalization & Taxonomy Integration)
+1. Set up ESCO Taxonomy dataset files and model loader.
+2. Implement semantic search & mapping using sentence-transformers to map extracted skills to canonical ESCO terms.
+3. Wire normalizer service to map skills, seniority levels, and requirements classifications.
+4. Update API contracts and run validation checks.
