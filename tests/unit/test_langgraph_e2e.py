@@ -31,20 +31,20 @@ def test_review_router_conditions() -> None:
     # 1. High confidence path -> persistence
     state_high = {
         "review_result": {
-            "needs_ollama": False,
+            "needs_mistral": False,
             "needs_review": False,
         }
     }
     assert review_router(state_high) == "persistence"
 
-    # 2. Low confidence path -> ollama
+    # 2. Low confidence path -> mistral
     state_low = {
         "review_result": {
-            "needs_ollama": True,
+            "needs_mistral": True,
             "needs_review": True,
         }
     }
-    assert review_router(state_low) == "ollama_resolution"
+    assert review_router(state_low) == "mistral_resolution"
 
 
 @pytest.mark.asyncio
@@ -60,7 +60,7 @@ async def test_full_graph_execution_success(mock_db_session) -> None:
         "extraction_result": {},
         "normalization_result": {},
         "review_result": {},
-        "ollama_result": {},
+        "mistral_result": {},
         "persistence_result": {},
         "errors": [],
         "execution_metadata": {},
@@ -134,10 +134,10 @@ async def test_full_graph_execution_success(mock_db_session) -> None:
             },
         }
         mock_review_eval.return_value = {
-            "review_result": {"needs_ollama": False, "needs_review": False},
+            "review_result": {"needs_mistral": False, "needs_review": False},
             "execution_metadata": {
                 "review_eval_duration_ms": 5.0,
-                "needs_ollama": False,
+                "needs_mistral": False,
                 "needs_review": False,
             },
         }
@@ -159,7 +159,7 @@ async def test_full_graph_execution_success(mock_db_session) -> None:
         mock_persistence.assert_called_once()
 
 
-def test_api_pipeline_endpoint(mock_db_session) -> None:
+def test_api_pipeline_endpoints(mock_db_session) -> None:
     job_id = uuid.uuid4()
     mock_final_state = {
         "job_source": {
@@ -180,7 +180,7 @@ def test_api_pipeline_endpoint(mock_db_session) -> None:
                 }
             ]
         },
-        "review_result": {"needs_ollama": False, "needs_review": False},
+        "review_result": {"needs_mistral": False, "needs_review": False},
         "persistence_result": {"job_id": str(job_id), "skill_ids": ["skill-uuid"]},
         "errors": [],
         "execution_metadata": {
@@ -203,10 +203,28 @@ def test_api_pipeline_endpoint(mock_db_session) -> None:
         new_callable=mock.AsyncMock,
         return_value=mock_final_state,
     ):
+        # 1. Test /run/url
         response = client.post(
-            "/api/v1/pipeline/run", json={"url": "https://example.com/job/software-dev"}
+            "/api/v1/pipeline/run/url",
+            json={"url": "https://example.com/job/software-dev"},
         )
         assert response.status_code == 200
         data = response.json()
-        assert data["persistence_result"]["job_id"] == str(job_id)
-        assert data["success"] is True
+        assert "job_information" in data
+        assert "skills" in data
+        assert (
+            data["job_information"]["source_url"]
+            == "https://example.com/job/software-dev"
+        )
+        assert "success" not in data
+
+        # 2. Test /run/pdf
+        response_pdf = client.post(
+            "/api/v1/pipeline/run/pdf",
+            json={"pdf_path": "C:/Users/USER/Downloads/sample-job-description.pdf"},
+        )
+        assert response_pdf.status_code == 200
+        data_pdf = response_pdf.json()
+        assert "job_information" in data_pdf
+        assert "skills" in data_pdf
+        assert "success" not in data_pdf

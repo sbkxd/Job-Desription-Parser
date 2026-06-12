@@ -86,12 +86,20 @@ graph TD
 ### LangGraph Orchestration, MCP Tools & Ollama Integration (Phase 7)
 | Component | Module | Responsibility |
 |-----------|--------|----------------|
-| `PipelineState` | `app.orchestration.state.state` | TypedDict carrying data (job_source, raw_document, segmented_document, extraction_result, normalization_result, review_result, ollama_result, persistence_result, errors, execution_metadata, db) across nodes. |
-| `JDPipelineGraph` / `workflow_graph` | `app.orchestration.graph.pipeline_graph` | Compiled LangGraph workflow orchestration fetch, segment, extract, normalize, review_eval, ollama, review_queue, and persist nodes. |
-| `ReviewRouter` | `app.orchestration.routing.router` | Routing logic based on confidence evaluation: confidence >= threshold -> Persistence; confidence < threshold -> Ollama fallback. |
-| `OllamaClient` / `QwenAdapter` | `app.orchestration.ollama` | Interface to local Ollama (http://localhost:11434, qwen3:4b) with retries, timeouts, and JSON schemas. |
+| `PipelineState` | `app.orchestration.state.state` | TypedDict carrying data (job_source, raw_document, segmented_document, extraction_result, normalization_result, review_result, mistral_result, persistence_result, errors, execution_metadata, db) across nodes. |
+| `JDPipelineGraph` / `workflow_graph` | `app.orchestration.graph.pipeline_graph` | Compiled LangGraph workflow orchestration fetch, segment, extract, normalize, review_eval, mistral_resolution, review_queue, and persist nodes. |
+| `ReviewRouter` | `app.orchestration.routing.router` | Routing logic based on confidence evaluation: confidence >= threshold -> Persistence; confidence < threshold -> Mistral fallback. |
+| `MistralClient` | `app.orchestration.mistral` | Interface to Mistral API (mistral-small-latest) with retries, timeouts, structured JSON schemas, latency, and token metrics. |
 | MCP Tools | `app.orchestration.mcp` | Model Context Protocol tool framework (BaseMCPTool, ToolRegistry) exposing `fetch_jd`, `run_ner`, `lookup_taxonomy`, and `save_parsed_jd` to LLM clients. |
-| `PipelineService` | `app.orchestration.services.pipeline_service` | Triggers the LangGraph pipeline execution and tracks execution metrics in PostgreSQL audit tables. |
+| `PipelineService` | `app.orchestration.services.pipeline_service` | Triggers the LangGraph pipeline execution, tracks execution metrics in PostgreSQL audit tables, and persists final PipelineState. |
+
+### Presentation & Formatting Layer (Phase 9)
+| Component | Module | Responsibility |
+|-----------|--------|----------------|
+| `JobIntelligenceReport` | `app.presentation.schemas.job_intelligence` | Pydantic response contract detailing job, role profile, categorized skills, education, responsibilities, and qualifications. |
+| `JobIntelligenceFormatter` | `app.presentation.formatters.job_intelligence_formatter` | Formatter converting internal `PipelineState` into structured business-facing reports. |
+| `ResponseBuilder` | `app.presentation.formatters.response_builder` | presentation helper class returning the formatted JSON report. |
+| Debug Endpoint | `app.api.v1.endpoints.pipeline` | `GET /pipeline/debug/{job_id}` returns the full internal PipelineState. |
 
 ## Data Flow
 ```mermaid
@@ -104,7 +112,7 @@ sequenceDiagram
     participant Parse as Trafilatura Parser
     participant NLP as NLP NER Engine
     participant Norm as Normalization Engine (ESCO)
-    participant Olla as Ollama (Qwen3:4B fallback)
+    participant Mist as Mistral Small Latest
     participant DB as PostgreSQL Database
 
     Client->>API: POST /pipeline/run (URL/PDF)
@@ -120,8 +128,8 @@ sequenceDiagram
     Orc->>Norm: Map to ESCO Taxonomy
     Norm-->>Orc: Standardized Skills (IDs/Titles)
     opt Confidence < Threshold / Out of Taxonomy
-        Orc->>Olla: Disambiguate skill candidates
-        Olla-->>Orc: Recommended standard match + reason
+        Orc->>Mist: Disambiguate skill candidates
+        Mist-->>Orc: Recommended standard match + reason
     end
     Orc->>DB: Persist Job, Skills, Run Logs, & Pipeline events
     Orc->>Client: Return Structured Output
@@ -180,6 +188,7 @@ erDiagram
         float duration_ms
         timestamp started_at
         timestamp completed_at
+        json pipeline_state
     }
     AUDIT_LOGS {
         UUID id PK
@@ -248,6 +257,6 @@ graph LR
 | Multi-layered skill normalization pipeline | Exact, alias, fuzzy, and semantic embedding matchers run in cascade order to balance speed, precision, and semantic recall. |
 | Quality Control Review Queue & Auditing | Low-confidence mappings (<0.90) and out-of-taxonomy modern terms (e.g. LangChain) trigger human review states. Every action (approve, reject, correct) is written to a structured database audit log to prepare for future LLM integration. |
 | LangGraph Workflow Orchestration | Provides robust state management, clear visual graph representation, easy conditional routing logic, and standard human-in-the-loop interfaces. |
-| Local LLM (Ollama / Qwen3:4B) Fallback | Ollama qwen3:4b model is dynamically executed as fallback only for low confidence (<0.90) or out-of-taxonomy items, preserving API latency and throughput. |
+| Mistral Small Latest Fallback | Mistral Small Latest model is dynamically executed via official API as fallback only for low confidence (<0.90) or out-of-taxonomy items, preserving API latency and cost. |
 | Model Context Protocol (MCP) Bindings | Provides declarative standardized interface for LLM client integration (`fetch_jd`, `run_ner`, `lookup_taxonomy`, `save_parsed_jd`), enabling agentic tools usage. |
 | Node Execution Audit Tracking | Persists diagnostic metrics (event status, duration) for each step of the pipeline execution in `pipeline_events`. |

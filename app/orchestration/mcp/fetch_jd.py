@@ -68,14 +68,35 @@ class FetchJDTool(BaseMCPTool):
         fetch_error = None
         duration_ms = 0.0
 
-        if detector.requires_javascript(source_type):
-            playwright_fetcher = PlaywrightFetcher()
-            pw_res = await playwright_fetcher.fetch(url)
-            html_content = pw_res.html
-            status_code = pw_res.status_code
-            fetch_error = pw_res.error
-            duration_ms = pw_res.duration_ms
-        else:
+        import logging
+
+        logger = logging.getLogger(__name__)
+
+        use_playwright = detector.requires_javascript(source_type)
+        if use_playwright:
+            try:
+                playwright_fetcher = PlaywrightFetcher()
+                pw_res = await playwright_fetcher.fetch(url)
+                if pw_res.success and pw_res.html:
+                    html_content = pw_res.html
+                    status_code = pw_res.status_code
+                    fetch_error = pw_res.error
+                    duration_ms = pw_res.duration_ms
+                else:
+                    logger.warning(
+                        "Playwright fetch failed (status %s): %s. Falling back to RequestsFetcher.",
+                        pw_res.status_code,
+                        pw_res.error,
+                    )
+                    use_playwright = False
+            except Exception as e:
+                logger.warning(
+                    "Playwright fetch raised exception: %s. Falling back to RequestsFetcher.",
+                    e,
+                )
+                use_playwright = False
+
+        if not use_playwright:
             with RequestsFetcher() as requests_fetcher:
                 req_res = requests_fetcher.fetch(url)
                 html_content = req_res.html
@@ -83,7 +104,7 @@ class FetchJDTool(BaseMCPTool):
                 fetch_error = req_res.error
                 duration_ms = req_res.duration_ms
 
-        if fetch_error or not html_content:
+        if not html_content:
             raise RuntimeError(
                 f"Failed to fetch URL (status {status_code}): {fetch_error or 'No content returned'}"
             )

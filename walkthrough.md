@@ -131,7 +131,7 @@
   - `skills/review_flag.md` defining QC rules, edge cases, and JSON schemas.
   - `tests/fixtures/review/review_fixtures.json` dataset for testing low confidence, out-of-taxonomy, and alias conflict cases.
 
-### Phase 7: LangGraph Orchestration, MCP Tools & Ollama Integration
+### Phase 7: LangGraph Orchestration, MCP Tools & Mistral Integration
 - **Pipeline State Design** (`app/orchestration/state/state.py`):
   - `PipelineState` TypedDict tracking input, output, errors, and timing metadata across stages.
   - Implements custom list/dict merge reducers to aggregate logs and execution step metrics.
@@ -139,15 +139,24 @@
   - Builds and compiles `workflow_graph` consisting of nodes for fetching, segmenting, extracting, normalizing, evaluating, fallback-resolving, queueing, and persisting.
   - Exposes visual graph generator rendering to `docs/graphs/pipeline_flow.md`.
 - **Conditional Routing** (`app/orchestration/routing/router.py` & `app/orchestration/nodes/review_eval_node.py`):
-  - Evaluates extracted confidence levels. Mappings with confidence scores >= 0.90 skip LLM logic. Ambiguous or out-of-taxonomy items route to Ollama fallback resolution.
-- **Ollama Client & Qwen Adapter** (`app/orchestration/ollama/`):
-  - Client communicating with local Ollama service (`http://localhost:11434`, `qwen3:4b`) using retries, structured JSON formatting, and system templates (`skills/ambiguous_skill_resolution.md` etc.).
+  - Evaluates extracted confidence levels. Mappings with confidence scores >= 0.90 skip LLM logic. Ambiguous or out-of-taxonomy items route to Mistral fallback resolution.
+- **Mistral Client & Prompt Builder** (`app/orchestration/mistral/`):
+  - Official Async SDK client communicating with Mistral API (`mistral-small-latest`) using dynamic retries, structured JSON formatting, validation, latency, and token usage metrics.
 - **Model Context Protocol (MCP) Bindings** (`app/orchestration/mcp/`):
   - Exposes domain capabilities (`fetch_jd`, `run_ner`, `lookup_taxonomy`, `save_parsed_jd`) through standardized tool contracts.
 - **Unified Pipeline API Endpoint** (`POST /api/v1/pipeline/run`):
   - Exposes the E2E orchestrated graph pipeline to clients, executing all stages synchronously and returning the finalized state.
 - **Execution Auditing** (`app/models/models.py` & `app/orchestration/services/pipeline_service.py`):
   - Persists diagnostic events (`pipeline_events`) and overall execution duration/status (`processing_runs`) to the database.
+
+### Phase 9: Final Output Formatter Integration
+- **Presentation Layer Schemas** (`app/presentation/schemas/job_intelligence.py`):
+  - Defines `JobIntelligenceReport` as the public schema contract separating internal execution state from business-facing responses.
+- **Job Intelligence Formatter** (`app/presentation/formatters/job_intelligence_formatter.py`):
+  - Restructures, cleans, and deduplicates the internal `PipelineState` into the clean business intelligence schema.
+  - Automatically identifies required vs preferred skills, extracts education requirements, removes boilerplate from responsibilities, and aggregates the technology stack.
+- **Debug endpoint** (`GET /api/v1/pipeline/debug/{job_id}`):
+  - Fetches the full unformatted `PipelineState` from the database for full observability and diagnostics.
 
 ## Why It Exists
 - The settings module ensures the application fails fast if configuration is missing.
@@ -199,8 +208,8 @@
 2. **Segment Node**: Normalizes text and splits content into logical structured sections.
 3. **Extract Node**: Conducts Gazetteer and NER keyword extractions for skills, experience bounds, and seniority levels.
 4. **Normalize Node**: Standardization check matching skills to ESCO concepts.
-5. **Review Evaluation Node**: Examines minimum match confidence score. If below 0.90 threshold or modern term not found in taxonomy, redirects routing to Ollama Resolution.
-6. **Ollama Resolution Node (Fallback)**: Invokes `qwen3:4b` dynamically to resolve taxonomy ambiguity or classify out-of-taxonomy items using local context.
+5. **Review Evaluation Node**: Examines minimum match confidence score. If below 0.90 threshold or modern term not found in taxonomy, redirects routing to Mistral Resolution.
+6. **Mistral Resolution Node (Fallback)**: Invokes `mistral-small-latest` dynamically to resolve taxonomy ambiguity or classify out-of-taxonomy items using official API.
 7. **Review Queue Node**: Persists items flagged for human verification to review queues.
 8. **Persistence Node**: Writes final structured outputs to the database and logs individual timing metrics in `pipeline_events`.
 
@@ -242,7 +251,9 @@ docker compose up db -d
 - `POST /api/v1/reviews/{id}/approve` — Approves a suggested skill mapping
 - `POST /api/v1/reviews/{id}/reject` — Rejects a suggested skill mapping
 - `POST /api/v1/reviews/{id}/correct` — Overrides a suggested skill mapping
-- `POST /api/v1/pipeline/run` — Runs the E2E orchestrated LangGraph pipeline
+- `POST /api/v1/pipeline/run/url` — Runs the E2E orchestrated LangGraph pipeline on a URL (returns JobIntelligenceReport)
+- `POST /api/v1/pipeline/run/pdf` — Runs the E2E orchestrated LangGraph pipeline on a local PDF file (returns JobIntelligenceReport)
+- `GET /api/v1/pipeline/debug/{job_id}` — Retrieves the full internal PipelineState for the latest run of a given job_id
 - `GET /docs` — Swagger UI
 - `GET /redoc` — ReDoc UI
 

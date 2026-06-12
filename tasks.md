@@ -1,18 +1,28 @@
 # Tasks - JD Skill Extraction Pipeline
 
 ## Pending
-- **Phase 8**: Wait for Phase 8 instructions (pending)
-- **Phase 9**: Deployment Enhancements & Cloud Readiness
-- **Phase 10**: Observability, Security & Dockerization
-- **Phase 11**: Production Hardening & Final Release
+- **Phase 10**: Deployment Enhancements & Cloud Readiness
+- **Phase 11**: Observability, Security & Dockerization
+- **Phase 12**: Production Hardening & Final Release
 
 ## In Progress
-*None*
+- **Phase 9: Final Output Formatter Integration**
+  - [ ] Milestone 9.1: Presentation Schemas (`app/presentation/schemas/job_intelligence.py`)
+  - [ ] Milestone 9.2: Job Intelligence Formatter (`app/presentation/formatters/job_intelligence_formatter.py`)
+  - [ ] Milestone 9.3: Alembic migration for `pipeline_state` JSON column in `processing_runs`
+  - [ ] Milestone 9.4: Update pipeline endpoints to return formatted `JobIntelligenceReport`
+  - [ ] Milestone 9.5: Add debug endpoint `GET /pipeline/debug/{job_id}`
+  - [ ] Milestone 9.6: Update `architecture.md` and `walkthrough.md`
+  - [ ] Milestone 9.7: Add presentation unit tests and verify code quality
 
 ## Blocked
 *None*
 
 ## Completed
+- **Phase 8: Mistral Small Latest Migration**
+  - [x] Milestone 8.1: Mistral Client (`app/orchestration/mistral/mistral_client.py` with retries, timeouts, and structured JSON)
+  - [x] Milestone 8.2: Mistral Resolution Node (`app/orchestration/nodes/mistral_resolution_node.py` replacing Ollama)
+  - [x] Milestone 8.3: Verification and Quality Gate (ruff, black, mypy, and 259 unit/E2E tests passing)
 - **Phase 7: LangGraph Orchestration, MCP Tools & Ollama Integration**
   - [x] Milestone 7.1: Pipeline State Design (`PipelineState` model and merge reducers)
   - [x] Milestone 7.2: LangGraph Foundation (StateGraph setup & compilation)

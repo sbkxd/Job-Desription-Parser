@@ -7,7 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.8.0] - 2026-06-10
+## [0.10.0] - 2026-06-12
+
+### Added
+- Created `app/presentation/` directory for public response presentation layer.
+- Added `JobIntelligenceReport` Pydantic response models in `app/presentation/schemas/job_intelligence.py` defining clean business-facing contracts.
+- Implemented `JobIntelligenceFormatter` under `app/presentation/formatters/job_intelligence_formatter.py` to aggregate, format, and structure raw pipeline states, including required/preferred skill classification and boilerplate text cleanup.
+- Added `ResponseBuilder` helper class under `app/presentation/formatters/response_builder.py`.
+- Added Alembic migration (`91c8b91e6e90`) adding `pipeline_state` JSON column to `processing_runs` table for persistent debugging.
+- Implemented debug endpoint `GET /api/v1/pipeline/debug/{job_id}` to retrieve raw PipelineState.
+- Created `tests/unit/test_presentation.py` covering all presentation schemas, formatters, and endpoints.
+
+### Changed
+- Updated E2E endpoints `/run/url` and `/run/pdf` to return `JobIntelligenceReport` instead of internal graph state.
+- Updated `PipelineService.run_pipeline` to persist final `PipelineState` JSON in `processing_runs` database records.
+
+## [0.9.0] - 2026-06-12
+
+### Added
+- Official Mistral Async API Client (`MistralClient`) under `app/orchestration/mistral/` utilizing `mistralai` Speakeasy SDK.
+- Dynamic retry handling with exponential backoff, structured JSON response formatting, and configuration timeout limits.
+- Automated token consumption, API latency, error metrics logging and secret masking.
+- `MistralResolutionNode` replacing the deprecated `OllamaResolutionNode` inside LangGraph.
+- Schema validation checking bounds and structure of LLM responses using Pydantic.
+- Comprehensive mocked unit tests for the Mistral client, response parser, prompt builder, and E2E pipeline nodes.
+
+### Changed
+- Replaced all local Ollama/Qwen3:4B workflow dependencies and references with Mistral Small Latest.
+- Updated `PipelineState` to hold `mistral_result` and routing state to use `needs_mistral`.
+- Standardized imports and formatting conforming to MyPy, Black, and Ruff styles.
+
+### Removed
+- Deleted deprecated `app/orchestration/ollama/` directory and components.
+- Deleted `ollama_resolution_node.py` and its corresponding tests.
 
 ### Added
 - Milestone 7.1: Pipeline State Design (`PipelineState` TypedDict with merge list/dict reducers).

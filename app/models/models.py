@@ -3,8 +3,10 @@
 import enum
 import uuid
 from datetime import datetime
+from typing import Any
 
 from sqlalchemy import (
+    JSON,
     UUID,
     Boolean,
     DateTime,
@@ -58,7 +60,9 @@ class Job(Base):
     source_url: Mapped[str | None] = mapped_column(Text, nullable=True)
     raw_text: Mapped[str | None] = mapped_column(Text, nullable=True)
     status: Mapped[JobStatus] = mapped_column(
-        Enum(JobStatus), default=JobStatus.PENDING, nullable=False
+        Enum(JobStatus, values_callable=lambda x: [e.value for e in x]),
+        default=JobStatus.PENDING,
+        nullable=False,
     )
     review_required: Mapped[bool] = mapped_column(
         Boolean, default=False, nullable=False
@@ -137,7 +141,9 @@ class JobSkill(Base):
         nullable=False,
     )
     requirement_type: Mapped[RequirementType] = mapped_column(
-        Enum(RequirementType), default=RequirementType.MUST_HAVE, nullable=False
+        Enum(RequirementType, values_callable=lambda x: [e.value for e in x]),
+        default=RequirementType.MUST_HAVE,
+        nullable=False,
     )
     confidence_score: Mapped[float | None] = mapped_column(Float, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
@@ -169,7 +175,9 @@ class ReviewQueue(Base):
         unique=True,
     )
     status: Mapped[ReviewStatus] = mapped_column(
-        Enum(ReviewStatus), default=ReviewStatus.PENDING, nullable=False
+        Enum(ReviewStatus, values_callable=lambda x: [e.value for e in x]),
+        default=ReviewStatus.PENDING,
+        nullable=False,
     )
     flagged_reasons: Mapped[str | None] = mapped_column(Text, nullable=True)
     reviewed_by: Mapped[str | None] = mapped_column(String(256), nullable=True)
@@ -208,6 +216,7 @@ class ProcessingRun(Base):
     completed_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
+    pipeline_state: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
 
     # Relationships
     job: Mapped["Job"] = relationship("Job", back_populates="processing_runs")

@@ -70,7 +70,7 @@ class PipelineService:
             "extraction_result": {},
             "normalization_result": {},
             "review_result": {},
-            "ollama_result": {},
+            "mistral_result": {},
             "persistence_result": {},
             "errors": [],
             "execution_metadata": {},
@@ -95,7 +95,7 @@ class PipelineService:
                 ("extract", "extraction_duration_ms", "node_extract_success"),
                 ("normalize", "normalization_duration_ms", "node_normalize_success"),
                 ("review_eval", "review_eval_duration_ms", None),
-                ("ollama_resolution", "ollama_resolution_duration_ms", None),
+                ("mistral_resolution", "mistral_resolution_duration_ms", None),
                 ("review_queue", "review_queue_duration_ms", None),
                 ("persistence", "persistence_duration_ms", "node_persist_success"),
             ]
@@ -129,6 +129,10 @@ class PipelineService:
         run_record.error_message = error_msg
         run_record.duration_ms = duration_ms
         run_record.completed_at = datetime.utcnow()
+        if final_state:
+            # Exclude non-serializable session database object
+            serializable_state = {k: v for k, v in final_state.items() if k != "db"}
+            run_record.pipeline_state = serializable_state
 
         await self.session.flush()
 
