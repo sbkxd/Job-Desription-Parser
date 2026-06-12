@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     DB_USER: str = "postgres"
     DB_PASSWORD: str = "postgres"
 
+    # API Keys
+    MISTRAL_API_KEY: str = ""
+
     # Logging
     LOG_LEVEL: str = DEFAULT_LOG_LEVEL
     JSON_LOGS: bool = False
