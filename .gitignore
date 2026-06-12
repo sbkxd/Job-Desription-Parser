@@ -22,45 +22,85 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# Virtual Environment
+# Virtual Environments
 .venv/
 venv/
 ENV/
 env/
 
-# IDE / Editors
+# FastAPI
+.yaml-logs/
+
+# Testing
+.pytest_cache/
+.nosetests/
+.tox/
+vts/
+
+# Coverage
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+*.cover
+
+# Ruff
+.ruff_cache/
+
+# MyPy
+.mypy_cache/
+
+# Logs
+*.log
+logs/
+log/
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Docker
+docker-data/
+local-volumes/
+.docker/
+
+# LangGraph
+.langgraph/
+checkpoints/
+*.checkpoint
+
+# Mistral
+.mistral/
+mistral_cache/
+
+# Documentation
+site/
+mkdocs_build/
+
+# IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
+*.iml
 
-# Testing / Coverage
-htmlcov/
-.tox/
-.nosetests/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-vts/
-.coverage
-.coverage.*
-coverage.xml
-*.cover
-.yaml-logs/
+# Operating System Files
+.DS_Store
+Thumbs.db
+Desktop.ini
 
-# Database
-*.db
-*.sqlite
-
-# Logging
-*.log
-logs/
-
-# Local configuration / env
+# Secrets
 .env
 .env.*
 !.env.example
+secrets.env
+local.env
+config.local.*
+credentials.json
+service_account.json
+api_keys.json
 
-# Docker / System
-.DS_Store
-Thumbs.db
+# Miscellaneous
+.DS_Store?
+*~
