@@ -211,8 +211,43 @@ class ProcessingRun(Base):
 
     # Relationships
     job: Mapped["Job"] = relationship("Job", back_populates="processing_runs")
+    events: Mapped[list["PipelineEvent"]] = relationship(
+        "PipelineEvent", back_populates="run", cascade="all, delete-orphan"
+    )
 
     __table_args__ = (Index("ix_processing_runs_job_id", "job_id"),)
+
+
+class PipelineEvent(Base):
+    """Tracks individual node execution events inside pipeline runs."""
+
+    __tablename__ = "pipeline_events"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    run_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("processing_runs.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    node_name: Mapped[str] = mapped_column(String(128), nullable=False)
+    status: Mapped[str] = mapped_column(String(64), nullable=False)
+    duration_ms: Mapped[float | None] = mapped_column(Float, nullable=True)
+    error_message: Mapped[str | None] = mapped_column(Text, nullable=True)
+    timestamp: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    # Relationships
+    run: Mapped["ProcessingRun"] = relationship(
+        "ProcessingRun", back_populates="events"
+    )
+
+    __table_args__ = (
+        Index("ix_pipeline_events_run_id", "run_id"),
+        Index("ix_pipeline_events_node_name", "node_name"),
+    )
 
 
 class AuditLog(Base):

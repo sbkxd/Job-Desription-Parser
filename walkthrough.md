@@ -131,6 +131,24 @@
   - `skills/review_flag.md` defining QC rules, edge cases, and JSON schemas.
   - `tests/fixtures/review/review_fixtures.json` dataset for testing low confidence, out-of-taxonomy, and alias conflict cases.
 
+### Phase 7: LangGraph Orchestration, MCP Tools & Ollama Integration
+- **Pipeline State Design** (`app/orchestration/state/state.py`):
+  - `PipelineState` TypedDict tracking input, output, errors, and timing metadata across stages.
+  - Implements custom list/dict merge reducers to aggregate logs and execution step metrics.
+- **LangGraph central orchestration** (`app/orchestration/graph/pipeline_graph.py`):
+  - Builds and compiles `workflow_graph` consisting of nodes for fetching, segmenting, extracting, normalizing, evaluating, fallback-resolving, queueing, and persisting.
+  - Exposes visual graph generator rendering to `docs/graphs/pipeline_flow.md`.
+- **Conditional Routing** (`app/orchestration/routing/router.py` & `app/orchestration/nodes/review_eval_node.py`):
+  - Evaluates extracted confidence levels. Mappings with confidence scores >= 0.90 skip LLM logic. Ambiguous or out-of-taxonomy items route to Ollama fallback resolution.
+- **Ollama Client & Qwen Adapter** (`app/orchestration/ollama/`):
+  - Client communicating with local Ollama service (`http://localhost:11434`, `qwen3:4b`) using retries, structured JSON formatting, and system templates (`skills/ambiguous_skill_resolution.md` etc.).
+- **Model Context Protocol (MCP) Bindings** (`app/orchestration/mcp/`):
+  - Exposes domain capabilities (`fetch_jd`, `run_ner`, `lookup_taxonomy`, `save_parsed_jd`) through standardized tool contracts.
+- **Unified Pipeline API Endpoint** (`POST /api/v1/pipeline/run`):
+  - Exposes the E2E orchestrated graph pipeline to clients, executing all stages synchronously and returning the finalized state.
+- **Execution Auditing** (`app/models/models.py` & `app/orchestration/services/pipeline_service.py`):
+  - Persists diagnostic events (`pipeline_events`) and overall execution duration/status (`processing_runs`) to the database.
+
 ## Why It Exists
 - The settings module ensures the application fails fast if configuration is missing.
 - Structured JSON logging provides machine-readable records for cloud environments.
@@ -139,6 +157,7 @@
 - `FetchedDocument.to_output()` provides a stable contract for future NLP pipeline stages.
 - Dual-path skills extraction ensures exact-match technical words (e.g. C++) are caught via Gazetteer, while long-tail terms are discovered by the NER classifier.
 - Rule-based experience, seniority, and requirement classifiers provide stable baseline logic before LLM integrations.
+- LangGraph orchestration guarantees reliable state tracking, transparent execution logs, and seamless integration of deterministic rules with local LLM fallbacks.
 
 ## How It Works
 
@@ -175,7 +194,15 @@
 7. Matches are routed to `CandidateRanker` and `ConfidenceEngine` to filter candidates above thresholds, resolve duplicates, and assign explainable confidence scores.
 8. Unresolved skills are marked as `unmapped` with a 0.0 confidence level.
 
-
+### LangGraph Central Orchestration Flow
+1. **Fetch Node**: Retrieves URL or local PDF content, loading the text into `raw_document` of the `PipelineState`.
+2. **Segment Node**: Normalizes text and splits content into logical structured sections.
+3. **Extract Node**: Conducts Gazetteer and NER keyword extractions for skills, experience bounds, and seniority levels.
+4. **Normalize Node**: Standardization check matching skills to ESCO concepts.
+5. **Review Evaluation Node**: Examines minimum match confidence score. If below 0.90 threshold or modern term not found in taxonomy, redirects routing to Ollama Resolution.
+6. **Ollama Resolution Node (Fallback)**: Invokes `qwen3:4b` dynamically to resolve taxonomy ambiguity or classify out-of-taxonomy items using local context.
+7. **Review Queue Node**: Persists items flagged for human verification to review queues.
+8. **Persistence Node**: Writes final structured outputs to the database and logs individual timing metrics in `pipeline_events`.
 
 ### Configure Logging
 - `app/logging/logger.py`: `configure_logging(log_level?, json_logs?)` sets up structlog with environment-aware renderer.
@@ -215,6 +242,7 @@ docker compose up db -d
 - `POST /api/v1/reviews/{id}/approve` — Approves a suggested skill mapping
 - `POST /api/v1/reviews/{id}/reject` — Rejects a suggested skill mapping
 - `POST /api/v1/reviews/{id}/correct` — Overrides a suggested skill mapping
+- `POST /api/v1/pipeline/run` — Runs the E2E orchestrated LangGraph pipeline
 - `GET /docs` — Swagger UI
 - `GET /redoc` — ReDoc UI
 
@@ -232,7 +260,7 @@ Run quality checks:
 .venv\Scripts\python -m mypy app/
 ```
 
-### Test Coverage Summary (Phase 6 Complete)
+### Test Coverage Summary (Phase 7 Complete)
 | Module | Coverage |
 |--------|----------|
 | `app/config/` | 100% |
@@ -245,4 +273,5 @@ Run quality checks:
 | `app/extraction/` | 91% |
 | `app/normalization/` | 98% |
 | `app/review/` | 92% |
-| **Total** | **92%** |
+| `app/orchestration/` | 82% (Sub-nodes mocked to avoid running live heavy models) |
+| **Total** | **85%** |

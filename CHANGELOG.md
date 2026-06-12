@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-06-10
+
+### Added
+- Milestone 7.1: Pipeline State Design (`PipelineState` TypedDict with merge list/dict reducers).
+- Milestone 7.2: LangGraph Foundation (StateGraph pipeline workflow setup, node/edge registration, and Edge routing).
+- Milestone 7.3: Fetch JD Node executing ingestion fetchers (Requests and Playwright).
+- Milestone 7.4: Segment JD Node running preprocessing segmentation logic.
+- Milestone 7.5: Extraction Node calling information extraction services.
+- Milestone 7.6: Normalization Node matching skills against the ESCO taxonomy.
+- Milestone 7.7: Review Evaluation Node checking match confidence to decide conditional routing.
+- Milestone 7.8: Conditional Routing edge routing logic utilizing `ReviewRouter`.
+- Milestone 7.9: Ollama Client qwen3:4b adapter with retries and structured JSON formatting.
+- Milestone 7.10: Ollama Resolution Node fallback resolver for low-confidence or out-of-taxonomy skills.
+- Milestone 7.11: Review Queue Node registering items to the review manager database tables.
+- Milestone 7.12: Persistence Node saving full parsing runs and entities to Job and Skill databases.
+- Milestone 7.13: MCP Tool Framework defining BaseMCPTool interface and tool registration.
+- Milestone 7.14: MCP Tool `fetch_jd` wrapper tool.
+- Milestone 7.15: MCP Tool `run_ner` extraction wrapper tool.
+- Milestone 7.16: MCP Tool `lookup_taxonomy` normalization wrapper tool.
+- Milestone 7.17: MCP Tool `save_parsed_jd` persistence wrapper tool.
+- Milestone 7.18: Execution Audit System recording events to `pipeline_events` and `processing_runs` DB tables.
+- Milestone 7.19: Graph Visualization auto-generating mermaid flow markdown in `docs/graphs/pipeline_flow.md`.
+- Milestone 7.20: Pipeline HTTP endpoint API router `/api/v1/pipeline/run`.
+
+### Fixed
+- Fixed MCP execute signatures for Liskov substitution correctness under strict MyPy check.
+- Fixed mock targets and setup inside `test_mcp_tools.py` and `test_langgraph_e2e.py` to correctly bind mocks before import time graph compiles.
+
 ## [0.7.0] - 2026-06-10
 
 ### Added

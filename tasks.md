@@ -1,8 +1,7 @@
 # Tasks - JD Skill Extraction Pipeline
 
 ## Pending
-- **Phase 7**: MCP Tools
-- **Phase 8**: Ollama Integration
+- **Phase 8**: Wait for Phase 8 instructions (pending)
 - **Phase 9**: Deployment Enhancements & Cloud Readiness
 - **Phase 10**: Observability, Security & Dockerization
 - **Phase 11**: Production Hardening & Final Release
@@ -14,6 +13,27 @@
 *None*
 
 ## Completed
+- **Phase 7: LangGraph Orchestration, MCP Tools & Ollama Integration**
+  - [x] Milestone 7.1: Pipeline State Design (`PipelineState` model and merge reducers)
+  - [x] Milestone 7.2: LangGraph Foundation (StateGraph setup & compilation)
+  - [x] Milestone 7.3: Fetch JD Node (Retrieval via Playwright/Requests)
+  - [x] Milestone 7.4: Segment JD Node (Section segmentation node)
+  - [x] Milestone 7.5: Extraction Node (NER extraction attributes node)
+  - [x] Milestone 7.6: Normalization Node (ESCO matching normalization node)
+  - [x] Milestone 7.7: Review Evaluation Node (Confidence & routing evaluation node)
+  - [x] Milestone 7.8: Conditional Routing (ReviewRouter conditional edges)
+  - [x] Milestone 7.9: Ollama Client (qwen3:4b Client & qwen_adapter)
+  - [x] Milestone 7.10: Ollama Resolution Node (Fallback skill resolution node)
+  - [x] Milestone 7.11: Review Queue Node (Queue item generation node)
+  - [x] Milestone 7.12: Persistence Node (Job and skill database saving node)
+  - [x] Milestone 7.13: MCP Tool Framework (BaseMCPTool and registry)
+  - [x] Milestone 7.14: MCP Tool: `fetch_jd()` (Fetching wrapper)
+  - [x] Milestone 7.15: MCP Tool: `run_ner()` (Extraction wrapper)
+  - [x] Milestone 7.16: MCP Tool: `lookup_taxonomy()` (Normalization wrapper)
+  - [x] Milestone 7.17: MCP Tool: `save_parsed_jd()` (Persistence wrapper)
+  - [x] Milestone 7.18: Execution Audit System (ProcessingRuns & PipelineEvents logging)
+  - [x] Milestone 7.19: Graph Visualization (Mermaid documentation rendering in `docs/graphs/`)
+  - [x] Milestone 7.20: Full Pipeline API (POST `/api/v1/pipeline/run` endpoint)
 - **Phase 6: Review System, Taxonomy Gaps & Quality Control**
   - [x] Milestone 6.1: Review Schemas (`app/review/schemas/schemas.py`)
   - [x] Milestone 6.2: Confidence Evaluation Engine (`app/review/evaluators/confidence_evaluator.py`)

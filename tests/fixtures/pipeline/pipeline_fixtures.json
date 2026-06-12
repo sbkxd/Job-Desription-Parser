@@ -1,0 +1,18 @@
+{
+  "naukri_sample": {
+    "url": "https://www.naukri.com/job-listings-python-developer",
+    "html": "<html><body><h1>Python Developer</h1><p>We are looking for a Python developer with 3+ years of experience in Django and PySpark.</p></body></html>",
+    "expected": {
+      "title": "Python Developer",
+      "skills": ["Python", "Django", "PySpark"]
+    }
+  },
+  "greenhouse_sample": {
+    "url": "https://boards.greenhouse.io/acme/jobs/12345",
+    "html": "<html><body><h1>Senior React Engineer</h1><p>Requirements: 5 years of frontend experience with ReactJS and Tailwind CSS.</p></body></html>",
+    "expected": {
+      "title": "Senior React Engineer",
+      "skills": ["ReactJS", "Tailwind CSS"]
+    }
+  }
+}

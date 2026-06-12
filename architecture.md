@@ -83,17 +83,28 @@ graph TD
 | `AuditTrailSystem` | `app.review.audit.audit_trail` | Writes structured audit entries tracking reviewer actions, confidence, and timestamps. |
 | `ReviewService` | `app.review.services.review_service` | Orchestrates evaluate, flag, queuing, decisions, and auditing workflows. |
 
+### LangGraph Orchestration, MCP Tools & Ollama Integration (Phase 7)
+| Component | Module | Responsibility |
+|-----------|--------|----------------|
+| `PipelineState` | `app.orchestration.state.state` | TypedDict carrying data (job_source, raw_document, segmented_document, extraction_result, normalization_result, review_result, ollama_result, persistence_result, errors, execution_metadata, db) across nodes. |
+| `JDPipelineGraph` / `workflow_graph` | `app.orchestration.graph.pipeline_graph` | Compiled LangGraph workflow orchestration fetch, segment, extract, normalize, review_eval, ollama, review_queue, and persist nodes. |
+| `ReviewRouter` | `app.orchestration.routing.router` | Routing logic based on confidence evaluation: confidence >= threshold -> Persistence; confidence < threshold -> Ollama fallback. |
+| `OllamaClient` / `QwenAdapter` | `app.orchestration.ollama` | Interface to local Ollama (http://localhost:11434, qwen3:4b) with retries, timeouts, and JSON schemas. |
+| MCP Tools | `app.orchestration.mcp` | Model Context Protocol tool framework (BaseMCPTool, ToolRegistry) exposing `fetch_jd`, `run_ner`, `lookup_taxonomy`, and `save_parsed_jd` to LLM clients. |
+| `PipelineService` | `app.orchestration.services.pipeline_service` | Triggers the LangGraph pipeline execution and tracks execution metrics in PostgreSQL audit tables. |
+
 ## Data Flow
 ```mermaid
 sequenceDiagram
     participant Client
     participant API as API / MCP Layer
-    participant Orc as Orchestrator
+    participant Orc as Orchestrator (LangGraph)
     participant Det as Source Detector
     participant Fetch as Fetcher (Requests / Playwright)
     participant Parse as Trafilatura Parser
     participant NLP as NLP NER Engine
     participant Norm as Normalization Engine (ESCO)
+    participant Olla as Ollama (Qwen3:4B fallback)
     participant DB as PostgreSQL Database
 
     Client->>API: POST /pipeline/run (URL/PDF)
@@ -108,7 +119,11 @@ sequenceDiagram
     NLP-->>Orc: Spans & Confidence Scores
     Orc->>Norm: Map to ESCO Taxonomy
     Norm-->>Orc: Standardized Skills (IDs/Titles)
-    Orc->>DB: Persist Job, Skills & Run Logs
+    opt Confidence < Threshold / Out of Taxonomy
+        Orc->>Olla: Disambiguate skill candidates
+        Olla-->>Orc: Recommended standard match + reason
+    end
+    Orc->>DB: Persist Job, Skills, Run Logs, & Pipeline events
     Orc->>Client: Return Structured Output
 ```
 
@@ -174,12 +189,21 @@ erDiagram
         string details
         timestamp timestamp
     }
+    PIPELINE_EVENTS {
+        UUID id PK
+        UUID run_id FK
+        string node_name
+        string status
+        float duration_ms
+        timestamp created_at
+    }
 
     JOBS ||--o{ JOB_SKILLS : "has"
     SKILLS ||--o{ JOB_SKILLS : "referenced in"
     JOBS ||--o| REVIEW_QUEUE : "requires"
     JOBS ||--o{ PROCESSING_RUNS : "tracked by"
     JOBS ||--o{ AUDIT_LOGS : "tracks"
+    PROCESSING_RUNS ||--o{ PIPELINE_EVENTS : "contains"
 ```
 
 ## Fetcher Selection Logic
@@ -195,6 +219,7 @@ flowchart TD
     D --> G
     G -->|success| H[FetchedDocument]
     G -->|fail| I[IngestionResponse: failed]
+    C -->|fail| F
 ```
 
 ## CI/CD Architecture
@@ -222,3 +247,7 @@ graph LR
 | Deterministic experience & requirement classifiers | Initial rules ensure predictability and correctness before scaling up to LLMs. |
 | Multi-layered skill normalization pipeline | Exact, alias, fuzzy, and semantic embedding matchers run in cascade order to balance speed, precision, and semantic recall. |
 | Quality Control Review Queue & Auditing | Low-confidence mappings (<0.90) and out-of-taxonomy modern terms (e.g. LangChain) trigger human review states. Every action (approve, reject, correct) is written to a structured database audit log to prepare for future LLM integration. |
+| LangGraph Workflow Orchestration | Provides robust state management, clear visual graph representation, easy conditional routing logic, and standard human-in-the-loop interfaces. |
+| Local LLM (Ollama / Qwen3:4B) Fallback | Ollama qwen3:4b model is dynamically executed as fallback only for low confidence (<0.90) or out-of-taxonomy items, preserving API latency and throughput. |
+| Model Context Protocol (MCP) Bindings | Provides declarative standardized interface for LLM client integration (`fetch_jd`, `run_ner`, `lookup_taxonomy`, `save_parsed_jd`), enabling agentic tools usage. |
+| Node Execution Audit Tracking | Persists diagnostic metrics (event status, duration) for each step of the pipeline execution in `pipeline_events`. |
