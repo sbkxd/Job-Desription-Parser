@@ -2,23 +2,22 @@
 
 from app.orchestration.schemas.schemas import (
     MCPResponse,
-    OllamaResolution,
-    PipelineRequest,
+    MistralResolution,
+    PipelinePdfRequest,
     PipelineResult,
     PipelineStageResult,
+    PipelineUrlRequest,
 )
 
 
 def test_pipeline_request_validation() -> None:
     # 1. Valid URL
-    req = PipelineRequest(url="https://example.com/job")
+    req = PipelineUrlRequest(url="https://example.com/job")
     assert req.url == "https://example.com/job"
-    assert req.pdf_path is None
 
     # 2. Valid PDF
-    req2 = PipelineRequest(pdf_path="/path/to/jd.pdf")
+    req2 = PipelinePdfRequest(pdf_path="/path/to/jd.pdf")
     assert req2.pdf_path == "/path/to/jd.pdf"
-    assert req2.url is None
 
 
 def test_pipeline_stage_result() -> None:
@@ -48,8 +47,8 @@ def test_pipeline_result_serialization() -> None:
     assert res.extraction == {}
 
 
-def test_ollama_resolution() -> None:
-    res = OllamaResolution(
+def test_mistral_resolution() -> None:
+    res = MistralResolution(
         selected_skill="Apache Spark",
         reason="Matches context",
         confidence=0.95,

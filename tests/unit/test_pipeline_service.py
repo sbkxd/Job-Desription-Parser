@@ -38,7 +38,7 @@ async def test_pipeline_service_run_success() -> None:
             ]
         },
         "review_result": {
-            "needs_ollama": False,
+            "needs_mistral": False,
             "needs_review": False,
             "flagged_skills": [],
         },

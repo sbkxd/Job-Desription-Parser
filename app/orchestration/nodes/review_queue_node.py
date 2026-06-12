@@ -20,8 +20,8 @@ async def review_queue_node(state: PipelineState) -> Dict[str, Any]:
     start_time = time.perf_counter()
     review_res = state.get("review_result") or {}
     flagged_skills = list(review_res.get("flagged_skills") or [])
-    ollama_res = state.get("ollama_result") or {}
-    resolutions = ollama_res.get("resolutions") or []
+    mistral_res = state.get("mistral_result") or {}
+    resolutions = mistral_res.get("resolutions") or []
 
     # Map resolutions by raw skill name for fast matching
     resolutions_map = {r["raw_skill"].lower(): r for r in resolutions}

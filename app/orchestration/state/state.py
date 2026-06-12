@@ -36,7 +36,7 @@ class PipelineState(TypedDict):
     review_result: Dict[str, Any]
     """Flagged validation results: confidence status, review reason, needs_ollama/review flags."""
 
-    ollama_result: Dict[str, Any]
+    mistral_result: Dict[str, Any]
     """Fallback LLM-based disambiguation and resolution suggestions."""
 
     db: Any

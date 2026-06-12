@@ -13,16 +13,16 @@ graph TD;
 	extract(extract)
 	normalize(normalize)
 	review_eval(review_eval)
-	ollama_resolution(ollama_resolution)
+	mistral_resolution(mistral_resolution)
 	review_queue(review_queue)
 	persistence(persistence)
 	__end__([<p>__end__</p>]):::last
 	__start__ --> fetch;
 	extract --> normalize;
 	fetch --> segment;
+	mistral_resolution --> review_queue;
 	normalize --> review_eval;
-	ollama_resolution --> review_queue;
-	review_eval -.-> ollama_resolution;
+	review_eval -.-> mistral_resolution;
 	review_eval -.-> persistence;
 	review_queue --> persistence;
 	segment --> extract;

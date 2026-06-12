@@ -2,8 +2,8 @@
 
 from app.orchestration.nodes.extract_node import extract_node
 from app.orchestration.nodes.fetch_node import fetch_jd_node
+from app.orchestration.nodes.mistral_resolution_node import mistral_resolution_node
 from app.orchestration.nodes.normalize_node import normalize_node
-from app.orchestration.nodes.ollama_resolution_node import ollama_resolution_node
 from app.orchestration.nodes.persistence_node import persistence_node
 from app.orchestration.nodes.review_eval_node import review_eval_node
 from app.orchestration.nodes.review_queue_node import review_queue_node
@@ -15,7 +15,7 @@ __all__ = [
     "extract_node",
     "normalize_node",
     "review_eval_node",
-    "ollama_resolution_node",
+    "mistral_resolution_node",
     "review_queue_node",
     "persistence_node",
 ]

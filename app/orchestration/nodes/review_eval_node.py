@@ -22,7 +22,7 @@ async def review_eval_node(state: PipelineState) -> Dict[str, Any]:
     skills = normalization_result.get("skills") or []
 
     evaluator = ConfidenceEvaluator()
-    needs_ollama = False
+    needs_mistral = False
     needs_review = False
     flagged_skills = []
 
@@ -34,7 +34,7 @@ async def review_eval_node(state: PipelineState) -> Dict[str, Any]:
         if status == ReviewStatusSchema.PENDING:
             needs_review = True
             # Routing rule: any PENDING/low-confidence/out-of-taxonomy skill needs LLM assistance
-            needs_ollama = True
+            needs_mistral = True
             flagged_skills.append(
                 {
                     "raw_skill": s.get("raw_skill"),
@@ -50,13 +50,13 @@ async def review_eval_node(state: PipelineState) -> Dict[str, Any]:
 
     return {
         "review_result": {
-            "needs_ollama": needs_ollama,
+            "needs_mistral": needs_mistral,
             "needs_review": needs_review,
             "flagged_skills": flagged_skills,
         },
         "execution_metadata": {
             "review_eval_duration_ms": duration_ms,
-            "needs_ollama": needs_ollama,
+            "needs_mistral": needs_mistral,
             "needs_review": needs_review,
         },
     }

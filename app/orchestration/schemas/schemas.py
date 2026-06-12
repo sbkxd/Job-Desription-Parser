@@ -5,15 +5,16 @@ from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 
 
-class PipelineRequest(BaseModel):
-    """Payload for triggering the job description parser pipeline."""
+class PipelineUrlRequest(BaseModel):
+    """Payload for triggering the job description parser pipeline with a URL."""
 
-    url: Optional[str] = Field(
-        default=None, description="The URL of the job description to fetch."
-    )
-    pdf_path: Optional[str] = Field(
-        default=None, description="The local path to a PDF job description."
-    )
+    url: str = Field(..., description="The URL of the job description to fetch.")
+
+
+class PipelinePdfRequest(BaseModel):
+    """Payload for triggering the job description parser pipeline with a PDF path."""
+
+    pdf_path: str = Field(..., description="The local path to a PDF job description.")
 
 
 class PipelineStageResult(BaseModel):
@@ -35,13 +36,13 @@ class PipelineResult(BaseModel):
     extraction: Dict[str, Any] = Field(default_factory=dict)
     normalization: Dict[str, Any] = Field(default_factory=dict)
     review: Dict[str, Any] = Field(default_factory=dict)
-    ollama: Dict[str, Any] = Field(default_factory=dict)
+    mistral: Dict[str, Any] = Field(default_factory=dict)
     errors: List[str] = Field(default_factory=list)
     execution_metadata: Dict[str, Any] = Field(default_factory=dict)
 
 
-class OllamaResolution(BaseModel):
-    """Structuring the schema of local LLM resolution outputs."""
+class MistralResolution(BaseModel):
+    """Structuring the schema of Mistral LLM resolution outputs."""
 
     selected_skill: str
     reason: str

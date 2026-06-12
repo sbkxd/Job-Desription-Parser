@@ -7,8 +7,8 @@ from langgraph.graph import END, StateGraph
 
 from app.orchestration.nodes.extract_node import extract_node
 from app.orchestration.nodes.fetch_node import fetch_jd_node
+from app.orchestration.nodes.mistral_resolution_node import mistral_resolution_node
 from app.orchestration.nodes.normalize_node import normalize_node
-from app.orchestration.nodes.ollama_resolution_node import ollama_resolution_node
 from app.orchestration.nodes.persistence_node import persistence_node
 from app.orchestration.nodes.review_eval_node import review_eval_node
 from app.orchestration.nodes.review_queue_node import review_queue_node
@@ -33,7 +33,7 @@ def build_pipeline_graph() -> StateGraph[PipelineState]:
     builder.add_node("extract", extract_node)
     builder.add_node("normalize", normalize_node)
     builder.add_node("review_eval", review_eval_node)
-    builder.add_node("ollama_resolution", ollama_resolution_node)
+    builder.add_node("mistral_resolution", mistral_resolution_node)
     builder.add_node("review_queue", review_queue_node)
     builder.add_node("persistence", persistence_node)
 
@@ -49,13 +49,13 @@ def build_pipeline_graph() -> StateGraph[PipelineState]:
         "review_eval",
         review_router,
         {
-            "ollama_resolution": "ollama_resolution",
+            "mistral_resolution": "mistral_resolution",
             "persistence": "persistence",
         },
     )
 
     # 4. Configure Fallback Path static edges
-    builder.add_edge("ollama_resolution", "review_queue")
+    builder.add_edge("mistral_resolution", "review_queue")
     builder.add_edge("review_queue", "persistence")
     builder.add_edge("persistence", END)
 

@@ -1,10 +1,15 @@
-"""LangGraph node for running Ollama-based fallback resolution on flagged skills."""
+"""LangGraph node for running Mistral-based fallback resolution on flagged skills (Milestone 8.2)."""
 
 import re
 import time
 from typing import Any, Dict, List
 
-from app.orchestration.ollama.qwen_adapter import QwenAdapter
+from app.orchestration.mistral.mistral_client import MistralClient
+from app.orchestration.mistral.prompt_builder import PromptBuilder
+from app.orchestration.mistral.schemas import (
+    AmbiguousSkillSchema,
+    ReviewAssistanceSchema,
+)
 from app.orchestration.state.state import PipelineState
 
 
@@ -29,21 +34,22 @@ def _get_skill_context(raw_doc: str, skill: str) -> str:
     return ""
 
 
-async def ollama_resolution_node(state: PipelineState) -> Dict[str, Any]:
-    """Resolve low-confidence and out-of-taxonomy skills using the local Ollama LLM.
+async def mistral_resolution_node(state: PipelineState) -> Dict[str, Any]:
+    """Resolve low-confidence and out-of-taxonomy skills using the official Mistral API.
 
     Args:
         state: The current PipelineState.
 
     Returns:
-        State updates containing ollama_result and execution_metadata.
+        State updates containing mistral_result and execution_metadata.
     """
     start_time = time.perf_counter()
     raw_doc = state.get("raw_document") or ""
     review_res = state.get("review_result") or {}
     flagged_skills = review_res.get("flagged_skills") or []
 
-    adapter = QwenAdapter()
+    client = MistralClient()
+    builder = PromptBuilder()
     resolutions: List[Dict[str, Any]] = []
 
     for fs in flagged_skills:
@@ -60,23 +66,33 @@ async def ollama_resolution_node(state: PipelineState) -> Dict[str, Any]:
         try:
             if reason == "OUT_OF_TAXONOMY":
                 # Out of taxonomy fallback classification
-                res = await adapter.assist_review(
+                prompt = builder.build_review_assistance_prompt(
                     skill=skill_name, context=context, review_reason=reason
                 )
-                resolution_item["category"] = res.get("category", "Custom Skill")
-                resolution_item["suggested_confidence"] = res.get("confidence", 0.5)
+                res_review = await client.generate_structured(
+                    prompt=prompt,
+                    schema=ReviewAssistanceSchema,
+                    prompt_version="review_assistance_v1",
+                )
+                # Parse results from the returned Pydantic object
+                resolution_item["category"] = res_review.category
+                resolution_item["suggested_confidence"] = res_review.confidence
             else:
                 # Ambiguous taxonomy candidate resolution
-                # Pass raw skill name as fallback candidate
                 candidates = [fs.get("normalized_skill") or skill_name]
-                res = await adapter.resolve_ambiguous_skill(
+                prompt = builder.build_ambiguous_skill_prompt(
                     skill=skill_name, context=context, candidates=candidates
                 )
-                resolution_item["recommended_match"] = res.get(
-                    "selected_skill"
-                ) or fs.get("normalized_skill")
-                resolution_item["resolution_reason"] = res.get(
-                    "reason", "LLM fallback matching"
+                res_ambig = await client.generate_structured(
+                    prompt=prompt,
+                    schema=AmbiguousSkillSchema,
+                    prompt_version="ambiguous_skill_resolution_v1",
+                )
+                resolution_item["recommended_match"] = (
+                    res_ambig.selected_skill or fs.get("normalized_skill")
+                )
+                resolution_item["resolution_reason"] = (
+                    res_ambig.reason or "Mistral fallback matching"
                 )
         except Exception as e:
             # Non-blocking: record error inside resolution item and proceed
@@ -87,10 +103,10 @@ async def ollama_resolution_node(state: PipelineState) -> Dict[str, Any]:
     duration_ms = (time.perf_counter() - start_time) * 1000.0
 
     return {
-        "ollama_result": {
+        "mistral_result": {
             "resolutions": resolutions,
         },
         "execution_metadata": {
-            "ollama_resolution_duration_ms": duration_ms,
+            "mistral_resolution_duration_ms": duration_ms,
         },
     }
