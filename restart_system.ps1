@@ -18,8 +18,9 @@ Write-Host "Restarting Docker Database container..." -ForegroundColor Yellow
 docker compose down db
 docker compose up -d db
 
-Write-Host "Waiting 5 seconds for PostgreSQL database to initialize..." -ForegroundColor Yellow
-Start-Sleep -Seconds 5
+Write-Host "Waiting 25 seconds for PostgreSQL database and SentenceTransformer models to initialize..." -ForegroundColor Yellow
+Start-Sleep -Seconds 25
+
 
 Write-Host "Running Alembic migrations..." -ForegroundColor Yellow
 .venv\Scripts\alembic upgrade head
