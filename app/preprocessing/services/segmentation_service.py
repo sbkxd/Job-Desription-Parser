@@ -7,6 +7,8 @@ from app.logging.logger import get_logger
 from app.preprocessing.classifiers.boilerplate_detector import BoilerplateDetector
 from app.preprocessing.classifiers.section_classifier import SectionClassifier
 from app.preprocessing.cleaners.text_cleaner import TextCleaner
+from app.preprocessing.noise.services.noise_filter import NoiseFilterService
+from app.preprocessing.noise.validators.section_purifier import SectionPurifier
 from app.preprocessing.schemas.schemas import (
     RawDocument,
     Section,
@@ -19,13 +21,15 @@ logger = get_logger(__name__)
 
 
 class SegmentationService:
-    """Orchestrates cleaning, boilerplate removal, and section classification."""
+    """Orchestrates cleaning, boilerplate removal, noise filtering, and section classification."""
 
     def __init__(self) -> None:
         self.cleaner = TextCleaner()
         self.boilerplate_detector = BoilerplateDetector()
         self.segmenter = SectionSegmenter()
         self.classifier = SectionClassifier()
+        self.noise_filter = NoiseFilterService()
+        self.section_purifier = SectionPurifier()
 
     def segment(self, raw_document: RawDocument) -> SegmentationResult:
         """Run the full JD segmentation pipeline on a raw document.
@@ -59,13 +63,20 @@ class SegmentationService:
             # 2. Split into lines
             lines = [ln.strip() for ln in cleaned_text.split("\n")]
 
-            # 3. Detect boilerplate
-            clean_lines, boilerplate_blocks = self.boilerplate_detector.detect(lines)
+            # 3. Run Noise Filtering Layer (Milestone 4)
+            filtered_lines, noise_metrics = self.noise_filter.filter_noise(
+                lines, source_type=getattr(raw_document, "source_type", None)
+            )
 
-            # 4. Segment into raw sections
+            # 4. Detect boilerplate
+            clean_lines, boilerplate_blocks = self.boilerplate_detector.detect(
+                filtered_lines
+            )
+
+            # 5. Segment into raw sections
             raw_sections = self.segmenter.segment(clean_lines)
 
-            # 5. Classify each section
+            # 6. Classify each section
             sections: list[Section] = []
             for raw_sec in raw_sections:
                 final_type, confidence = self.classifier.classify(
@@ -83,9 +94,14 @@ class SegmentationService:
                     )
                 )
 
+            # 7. Run Section Purification and Quality Scoring (Milestone 5 & 7)
+            purified_sections, quality_scores = self.section_purifier.purify_sections(
+                sections
+            )
+
             # Construct the final segmented document
             segmented_doc = SegmentedDocument(
-                sections=sections,
+                sections=purified_sections,
                 boilerplate_removed=boilerplate_blocks,
                 segmented_at=datetime.utcnow(),
                 source_type=raw_document.source_type,
@@ -94,6 +110,9 @@ class SegmentationService:
                     "cleaned_lines_count": len(clean_lines),
                     "boilerplate_blocks_count": len(boilerplate_blocks),
                     "raw_sections_count": len(raw_sections),
+                    "noise_removed_lines": noise_metrics.get("removed_lines", 0),
+                    "noise_metrics": noise_metrics,
+                    "section_quality_scores": quality_scores,
                 },
             )
 
