@@ -6,19 +6,29 @@
 - **Phase 12**: Production Hardening & Final Release
 
 ## In Progress
-- **Phase 9: Final Output Formatter Integration**
-  - [ ] Milestone 9.1: Presentation Schemas (`app/presentation/schemas/job_intelligence.py`)
-  - [ ] Milestone 9.2: Job Intelligence Formatter (`app/presentation/formatters/job_intelligence_formatter.py`)
-  - [ ] Milestone 9.3: Alembic migration for `pipeline_state` JSON column in `processing_runs`
-  - [ ] Milestone 9.4: Update pipeline endpoints to return formatted `JobIntelligenceReport`
-  - [ ] Milestone 9.5: Add debug endpoint `GET /pipeline/debug/{job_id}`
-  - [ ] Milestone 9.6: Update `architecture.md` and `walkthrough.md`
-  - [ ] Milestone 9.7: Add presentation unit tests and verify code quality
+*None*
 
 ## Blocked
 *None*
 
 ## Completed
+- **Phase 8A: Complete Frontend Implementation**
+  - [x] Milestone 8A.1: Add PDF upload endpoint to FastAPI backend
+  - [x] Milestone 8A.2: Initialize Next.js 15 Tailwind application in `frontend/`
+  - [x] Milestone 8A.3: Configure global design system (`globals.css`)
+  - [x] Milestone 8A.4: Create core UI components (Header, Footer, Hero)
+  - [x] Milestone 8A.5: Implement InputSection (URL form + Drag & Drop PDF with progress bar)
+  - [x] Milestone 8A.6: Implement PipelineVisualizer node animations
+  - [x] Milestone 8A.7: Implement ResultsDashboard (cards, tag cloud, timeline, checklist, Recharts visualizations, exports)
+  - [x] Milestone 8A.8: Write frontend documentation
+- **Phase 9: Final Output Formatter Integration**
+  - [x] Milestone 9.1: Presentation Schemas (`app/presentation/schemas/job_intelligence.py`)
+  - [x] Milestone 9.2: Job Intelligence Formatter (`app/presentation/formatters/job_intelligence_formatter.py`)
+  - [x] Milestone 9.3: Alembic migration for `pipeline_state` JSON column in `processing_runs`
+  - [x] Milestone 9.4: Update pipeline endpoints to return formatted `JobIntelligenceReport`
+  - [x] Milestone 9.5: Add debug endpoint `GET /pipeline/debug/{job_id}`
+  - [x] Milestone 9.6: Update `architecture.md` and `walkthrough.md`
+  - [x] Milestone 9.7: Add presentation unit tests and verify code quality
 - **Phase 8: Mistral Small Latest Migration**
   - [x] Milestone 8.1: Mistral Client (`app/orchestration/mistral/mistral_client.py` with retries, timeouts, and structured JSON)
   - [x] Milestone 8.2: Mistral Resolution Node (`app/orchestration/nodes/mistral_resolution_node.py` replacing Ollama)

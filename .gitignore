@@ -104,3 +104,6 @@ api_keys.json
 # Miscellaneous
 .DS_Store?
 *~
+
+# Temporary Ingested Files
+uploads/

@@ -1,8 +1,10 @@
 """FastAPI router endpoint for triggering the orchestrated parser pipeline."""
 
+import os
+import shutil
 from typing import Any, Dict
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.session import get_db_session
@@ -52,6 +54,54 @@ async def run_pipeline_pdf(
     """Execute the full job description parser pipeline on a local PDF path."""
     service = PipelineService(db)
     final_state = await service.run_pipeline(pdf_path=payload.pdf_path)
+
+    if final_state.get("errors") and not final_state.get("raw_document"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Pipeline execution failed: {', '.join(final_state['errors'])}",
+        )
+
+    return ResponseBuilder.build_report(final_state)
+
+
+@router.post(
+    "/run/upload",
+    response_model=JobIntelligenceReport,
+    status_code=status.HTTP_200_OK,
+    summary="Run unified parser pipeline on an uploaded PDF file",
+    description="Uploads a PDF file from the browser, saves it locally, and executes the LangGraph pipeline on it.",
+)
+async def run_pipeline_upload(
+    file: UploadFile = File(...),  # noqa: B008
+    db: AsyncSession = Depends(get_db_session),
+) -> JobIntelligenceReport:
+    """Execute the full job description parser pipeline on an uploaded PDF."""
+    if not file.filename.lower().endswith(".pdf"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Only PDF files are supported.",
+        )
+
+    # Save uploaded file
+    upload_dir = os.path.join(os.getcwd(), "uploads")
+    os.makedirs(upload_dir, exist_ok=True)
+
+    import uuid
+
+    file_id = str(uuid.uuid4())
+    file_path = os.path.join(upload_dir, f"{file_id}.pdf")
+
+    try:
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to save uploaded file: {str(e)}",
+        ) from e
+
+    service = PipelineService(db)
+    final_state = await service.run_pipeline(pdf_path=file_path)
 
     if final_state.get("errors") and not final_state.get("raw_document"):
         raise HTTPException(

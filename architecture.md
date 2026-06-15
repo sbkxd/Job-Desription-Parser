@@ -260,3 +260,12 @@ graph LR
 | Mistral Small Latest Fallback | Mistral Small Latest model is dynamically executed via official API as fallback only for low confidence (<0.90) or out-of-taxonomy items, preserving API latency and cost. |
 | Model Context Protocol (MCP) Bindings | Provides declarative standardized interface for LLM client integration (`fetch_jd`, `run_ner`, `lookup_taxonomy`, `save_parsed_jd`), enabling agentic tools usage. |
 | Node Execution Audit Tracking | Persists diagnostic metrics (event status, duration) for each step of the pipeline execution in `pipeline_events`. |
+
+### Next.js 15 Frontend Client (Phase 8A)
+| Component | Module | Responsibility |
+|-----------|--------|----------------|
+| Home Workspace Portal | `frontend/src/app/page.tsx` | Arranges layout, handles responsive styling, and wires together Hero, Ingestion panel, Visualizers, and results cards. |
+| Telemetry Visualizer | `frontend/src/components/PipelineVisualizer.tsx` | Renders sequentially animated workflow nodes reflecting LangGraph's processing states. |
+| Results Dashboard | `frontend/src/components/ResultsDashboard.tsx` | Presents role profiles, checklist qualifications, timelines, tag clouds, Recharts graphs, copy actions, and download links. |
+| Zustand State Store | `frontend/src/store/useStore.ts` | Handles active stage tracking, error catching, and local caching of the compiled report. |
+| API Service Layer | `frontend/src/services/api.ts` | Integrates API endpoints `/run/url`, `/run/upload`, and `/health` with browser forms. |

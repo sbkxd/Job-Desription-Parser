@@ -174,3 +174,27 @@ async def test_pipeline_debug_endpoint():
         assert "execution_metadata" in data
     finally:
         app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_pipeline_run_upload_endpoint(mock_pipeline_state):
+    """Verify endpoint /run/upload returns JobIntelligenceReport schema."""
+    with (
+        patch(
+            "app.api.v1.endpoints.pipeline.PipelineService.run_pipeline",
+            new_callable=AsyncMock,
+            return_value=mock_pipeline_state,
+        ),
+        patch("builtins.open", mock.mock_open()),
+        patch("os.makedirs"),
+        patch("shutil.copyfileobj"),
+    ):
+        # Create a mock file payload
+        file_payload = {
+            "file": ("test.pdf", b"%PDF-1.4 mock content", "application/pdf")
+        }
+        response = client.post("/api/v1/pipeline/run/upload", files=file_payload)
+        assert response.status_code == 200
+        data = response.json()
+        assert "job_information" in data
+        assert data["job_information"]["job_title"] == "Senior Python Developer"

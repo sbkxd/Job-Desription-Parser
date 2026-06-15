@@ -7,7 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.10.0] - 2026-06-12
+## [0.11.0] - 2026-06-15
+
+### Added
+- Created a Next.js 15 production-grade frontend under `frontend/` leveraging React 19, TypeScript, and Tailwind CSS.
+- Added `/run/upload` endpoint in FastAPI backend to accept browser-based PDF uploads.
+- Configured a dark-first premium design theme with custom color tokens (`globals.css`).
+- Built core UI components: Header, Footer, and Hero.
+- Implemented `InputSection` with dual tabs for URL pasting and Drag & Drop PDF upload (with simulated upload progress).
+- Implemented `PipelineVisualizer` displaying live progress of LangGraph nodes (Fetch, Segment, Extract, Normalize, Review).
+- Implemented `ResultsDashboard` displaying job information, role profile, extracted skills (Required/Preferred/Normalized), tech tag cloud, timelines, and checklists.
+- Added Recharts analytical visualizations: Skill Distribution (Bar Chart), Attribute Density (Radar Chart), and Extraction Confidence (Area Chart).
+- Implemented clipboard copy and file export tools (JSON and CSV).
+- Added unit tests for file upload endpoints in `tests/unit/test_presentation.py`.
+- Wrote frontend architectural, walkthrough, component mapping, animation, and design system documentation under `frontend/docs/`.
+
 
 ### Added
 - Created `app/presentation/` directory for public response presentation layer.

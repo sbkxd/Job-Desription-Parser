@@ -158,6 +158,20 @@
 - **Debug endpoint** (`GET /api/v1/pipeline/debug/{job_id}`):
   - Fetches the full unformatted `PipelineState` from the database for full observability and diagnostics.
 
+### Phase 8A: Complete Frontend Implementation
+- **Production Next.js 15 App** (`frontend/`):
+  - Created a single-page workspace interface in TypeScript, React 19, and Tailwind CSS.
+- **Theme & Styles**:
+  - Implemented custom CSS variables for dark-first design, custom scrollbars, and neon glow/glassmorphism details (`src/app/globals.css`).
+- **Telemetry Visualizer Component** (`src/components/PipelineVisualizer.tsx`):
+  - Displays sequentially animated nodes for LangGraph stages (Ingestion → Segmentation → Extraction → Normalization → Review → Report).
+- **Results Dashboard & Analytics Component** (`src/components/ResultsDashboard.tsx`):
+  - Renders cards for Job Information, Role Profile, Skills, Stack Cloud, Timelines, Checklists, and Audit Summary.
+  - Renders Recharts analytical graphs (Skill distribution bar chart, category breakdown radar, and execution confidence area chart).
+  - Implemented file download actions (JSON and CSV) and copy results trigger.
+- **Backend File Upload** (`app/api/v1/endpoints/pipeline.py`):
+  - Added a new `POST /run/upload` endpoint allowing clients to upload raw PDF files directly from the browser drag-and-drop zone.
+
 ## Why It Exists
 - The settings module ensures the application fails fast if configuration is missing.
 - Structured JSON logging provides machine-readable records for cloud environments.
@@ -167,6 +181,9 @@
 - Dual-path skills extraction ensures exact-match technical words (e.g. C++) are caught via Gazetteer, while long-tail terms are discovered by the NER classifier.
 - Rule-based experience, seniority, and requirement classifiers provide stable baseline logic before LLM integrations.
 - LangGraph orchestration guarantees reliable state tracking, transparent execution logs, and seamless integration of deterministic rules with local LLM fallbacks.
+- The Next.js frontend delivers a premium, highly responsive user interface for talent acquisition teams and candidates.
+- The upload API endpoint allows browser drag-and-drop uploads for local PDF analysis.
+
 
 ## How It Works
 
@@ -240,6 +257,14 @@ docker compose up db -d
 .venv\Scripts\uvicorn app.main:app --reload
 ```
 
+### Start the Frontend App
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Open `http://localhost:3000` to interact with the platform.
+
 ### API Endpoints Available
 - `GET /api/v1/health/live` — Liveness probe
 - `GET /api/v1/health/ready` — Readiness probe (checks DB)
@@ -253,15 +278,22 @@ docker compose up db -d
 - `POST /api/v1/reviews/{id}/correct` — Overrides a suggested skill mapping
 - `POST /api/v1/pipeline/run/url` — Runs the E2E orchestrated LangGraph pipeline on a URL (returns JobIntelligenceReport)
 - `POST /api/v1/pipeline/run/pdf` — Runs the E2E orchestrated LangGraph pipeline on a local PDF file (returns JobIntelligenceReport)
-- `GET /api/v1/pipeline/debug/{job_id}` — Retrieves the full internal PipelineState for the latest run of a given job_id
+- `POST /api/v1/pipeline/run/upload` — Accepts uploaded PDF files, saves them, and runs the LangGraph pipeline (returns JobIntelligenceReport)
+- `GET /api/v1/pipeline/debug/{job_id}` — Retrieves the full unformatted PipelineState for the latest run of a given job_id
 - `GET /docs` — Swagger UI
 - `GET /redoc` — ReDoc UI
 
 ## How to Test
 
-Run full unit test suite with coverage:
+Run backend unit test suite:
 ```bash
-.venv\Scripts\pytest tests/unit/ -v --cov=app --cov-report=term-missing
+.venv\Scripts\pytest tests/unit/ -v
+```
+
+Compile and type-check the Next.js frontend production bundle:
+```bash
+cd frontend
+npm run build
 ```
 
 Run quality checks:
