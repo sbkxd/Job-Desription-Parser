@@ -76,7 +76,7 @@ async def run_pipeline_upload(
     db: AsyncSession = Depends(get_db_session),
 ) -> JobIntelligenceReport:
     """Execute the full job description parser pipeline on an uploaded PDF."""
-    if not file.filename.lower().endswith(".pdf"):
+    if not file.filename or not file.filename.lower().endswith(".pdf"):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Only PDF files are supported.",
