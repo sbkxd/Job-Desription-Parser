@@ -12,6 +12,17 @@
 *None*
 
 ## Completed
+- **Phase 3.5: JD Noise Filtering, Section Purification & Content Quality Hardening**
+  - [x] Milestone 1: Noise Taxonomy
+  - [x] Milestone 2: Pattern Library
+  - [x] Milestone 3: Rule Engine
+  - [x] Milestone 4: Noise Filter Service
+  - [x] Milestone 5: Section Purification
+  - [x] Milestone 6: Content Classifier
+  - [x] Milestone 7: Segmentation Validation
+  - [x] Milestone 8: Platform-Specific Cleaners
+  - [x] Milestone 9: Quality Dataset
+  - [x] Milestone 10: Metrics
 - **Phase 8A: Complete Frontend Implementation**
   - [x] Milestone 8A.1: Add PDF upload endpoint to FastAPI backend
   - [x] Milestone 8A.2: Initialize Next.js 15 Tailwind application in `frontend/`

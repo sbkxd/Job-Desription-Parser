@@ -69,6 +69,21 @@
 - **Few-Shot Prompt Skill File** (`skills/segment_jd.md`):
   - Few-shot examples and parsing rules for LLMs.
 
+### Phase 3.5: JD Noise Filtering, Section Purification & Content Quality Hardening
+- **Noise Taxonomy & Rule Engine** (`app/preprocessing/noise/rules/`):
+  - Abstract base `NoiseRule` evaluated on line level.
+  - Concrete rule implementations for Contact Information, ATS Form Artifacts, LinkedIn Board Artifacts, Job Board Recommendations, Employment Metadata, Company Legal Text, and Navigation Help text.
+- **Configurable Patterns Library** (`app/preprocessing/noise/patterns/patterns.py`):
+  - Centralized configurable regex patterns for email, phone, URL, metadata labels, and board recommends.
+- **Platform-Specific Cleaners** (`app/preprocessing/noise/services/noise_filter.py`):
+  - Handles site-specific sanitization templates for LinkedIn, Naukri, Foundit, Greenhouse, Lever, and Workable.
+- **Content Type Classifier** (`app/preprocessing/noise/classifiers/content_classifier.py`):
+  - Non-LLM classifier mapping lines to RESPONSIBILITY, QUALIFICATION, SKILL, EDUCATION, BENEFIT, COMPANY_INFO, CONTACT_INFO, METADATA, or NOISE.
+- **Section Purifier & Quality Metrics** (`app/preprocessing/noise/validators/section_purifier.py`):
+  - Filters out mismatched lines from specific sections post-segmentation (e.g. rejecting metadata/contact info in Responsibilities) and computes quality scores.
+- **Integration**:
+  - Embedded into `SegmentationService` to run noise filtering pre-segmentation, and section purification post-segmentation. Quality scores and metrics are saved in SegmentedDocument metadata.
+
 ### Phase 4: Information Extraction Engine
 - **Extraction Domain Schemas** (`app/extraction/schemas/schemas.py`):
   - `SkillMention`, `ExperienceRequirement`, `SeniorityLevel`, `RequirementClassification`, and `ExtractionResult` using Pydantic v2.

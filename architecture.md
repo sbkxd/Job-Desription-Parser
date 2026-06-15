@@ -48,6 +48,14 @@ graph TD
 | `SectionClassifier` | `app.preprocessing.classifiers.section_classifier` | Classifies sections using heading categories and bag-of-words keyword scoring. |
 | `SegmentationService` | `app.preprocessing.services.segmentation_service` | Orchestrates the entire pipeline, records execution metadata/timing, and emits `SegmentationResult`. |
 
+### Noise Filtering & Section Purification (Phase 3.5)
+| Component | Module | Responsibility |
+|-----------|--------|----------------|
+| `ContentTypeClassifier` | `app.preprocessing.noise.classifiers.content_classifier` | Classifies raw text lines into category zones (RESPONSIBILITY, QUALIFICATION, SKILL, etc.) using lightweight rule patterns and lexicons. |
+| `NoiseRule` / Concrete Rules | `app.preprocessing.noise.rules` | Base interface and concrete evaluation rules (Contact, ATS, LinkedIn, Job Board, Metadata, Legal, Navigation) determining if a line is noise. |
+| `NoiseFilterService` | `app.preprocessing.noise.services.noise_filter` | Orchestrates line-level cleansing and platform-specific cleaners (LinkedIn, Naukri, Foundit, Greenhouse, Lever, Workable). |
+| `SectionPurifier` | `app.preprocessing.noise.validators.section_purifier` | Validates, sanitizes, and evaluates the quality score of segmented sections post-segmentation. |
+
 ### Information Extraction Engine (Phase 4)
 | Component | Module | Responsibility |
 |-----------|--------|----------------|

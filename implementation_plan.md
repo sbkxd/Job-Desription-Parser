@@ -8,6 +8,7 @@
 - **Phase 1**: Environment Setup & Infrastructure
 - **Phase 2**: CI/CD Foundation & Ingestion Framework
 - **Phase 3**: Preprocessing & JD Segmentation
+- **Phase 3.5**: JD Noise Filtering, Section Purification & Content Quality Hardening
 - **Phase 4**: Information Extraction Engine
 - **Phase 5**: ESCO Normalization & Taxonomy Integration
 - **Phase 6**: Review System, Taxonomy Gaps & Quality Control

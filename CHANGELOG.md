@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-06-15
+
+### Added
+- Created `app/preprocessing/noise/` directory housing the Noise Taxonomy and Pattern Library.
+- Implemented configurable regex pattern matching for email, phone, URL, social links, and board recommendations under `patterns/patterns.py`.
+- Developed `NoiseRule` interface and concrete rule implementations (`rules/`) evaluating if lines constitute noise (e.g. `CONTACT_INFORMATION`, `ATS_FORM_ARTIFACTS`, `COMPANY_LEGAL_TEXT`, etc.).
+- Created `NoiseFilterService` (`services/noise_filter.py`) orchestrating line-level cleaning and platform-specific sanitization templates (LinkedIn, Naukri, Foundit, Greenhouse, Lever, Workable).
+- Implemented `ContentTypeClassifier` (`classifiers/content_classifier.py`) mapping text lines to canonical categories (`RESPONSIBILITY`, `QUALIFICATION`, `SKILL`, etc.).
+- Developed `SectionPurifier` (`validators/section_purifier.py`) performing post-segmentation purification on sections and calculating a `section_quality_score`.
+- Added json testing fixtures to `tests/fixtures/noise_filtering/` and created automated unit tests covering all noise rules, cleaners, classifiers, and validators.
+
+### Changed
+- Integrated noise filtering and section purification into `SegmentationService`.
+- Enabled saving metrics (noise removed, quality scores) in `SegmentedDocument` metadata.
+
 ## [0.11.0] - 2026-06-15
 
 ### Added
