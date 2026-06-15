@@ -1,0 +1,38 @@
+{
+  "clean_jd": {
+    "raw_text": "Software Engineer\nAbout Us\nWe are a growing startup.\nResponsibilities\nDevelop new features.\nDesign database schemas.\nBuild API endpoints.\nRequirements\nPython experience.\nBachelor's degree in CS.\n3+ years experience.",
+    "source_type": "greenhouse",
+    "expected_responsibility_quality": 1.0,
+    "expected_removed_lines": 0
+  },
+  "noisy_linkedin_jd": {
+    "raw_text": "Senior Python Developer\nApply Now\nReferrals increase your chances\nPeople also viewed\nResponsibilities\nDevelop frontend interfaces.\njanedoe@umkc.edu\n(816)235-0000\nRequirements\nAWS Certification.\nIndustries\nEasy Apply",
+    "source_type": "linkedin",
+    "expected_responsibility_quality": 1.0,
+    "expected_removed_lines": 7
+  },
+  "noisy_naukri_jd": {
+    "raw_text": "Data Engineer\nSponsored listing\nSimilar jobs\nResponsibilities\nDesign database schemas.\nRecommended jobs\nRequirements\nSQL and Spark.\nView more jobs",
+    "source_type": "naukri",
+    "expected_responsibility_quality": 1.0,
+    "expected_removed_lines": 4
+  },
+  "ats_generated_jd": {
+    "raw_text": "DevOps Engineer\nThis section auto-populates\nChoose an option\nResponsibilities\nMaintain cloud infrastructure.\nSelect one of the following\nRequirements\nKubernetes and Docker.",
+    "source_type": "workable",
+    "expected_responsibility_quality": 1.0,
+    "expected_removed_lines": 3
+  },
+  "university_hiring_form_jd": {
+    "raw_text": "Research Assistant\nFall/Spring hiring\nContact: prof@umkc.edu\nResponsibilities\nCollaborate on ML research.\nRequirements\nMaster's degree in Computer Science.",
+    "source_type": "generic_ats",
+    "expected_responsibility_quality": 1.0,
+    "expected_removed_lines": 1
+  },
+  "government_job_posting": {
+    "raw_text": "Systems Administrator\nEqual Opportunity Employer\nPrivacy Policy\nResponsibilities\nSupport internal networks.\nRequirements\n3 years experience.",
+    "source_type": "unknown",
+    "expected_responsibility_quality": 1.0,
+    "expected_removed_lines": 2
+  }
+}
