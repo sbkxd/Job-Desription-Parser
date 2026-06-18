@@ -330,6 +330,85 @@ Run quality checks:
 | `app/preprocessing/` | 94% |
 | `app/extraction/` | 91% |
 | `app/normalization/` | 98% |
-| `app/review/` | 92% |
-| `app/orchestration/` | 82% (Sub-nodes mocked to avoid running live heavy models) |
-| **Total** | **85%** |
+| app/review/ | 92% |
+| app/orchestration/ | 82% (Sub-nodes mocked to avoid running live heavy models) |
+| app/resume/ | 95% (Fully tested parser, extractor, and service) |
+| **Total** | **86%** |
+
+## Phase 8 Expansion: Resume Ingestion & Resume Intelligence
+
+### What Was Built
+- **Directory Scaffolding**: Structured the resume module (`app/resume/`) containing ingestion, extraction, normalization, schemas, services, and validators (Milestone 8.1).
+- **Resume Ingestion**: Developed `ResumeParser` in `app/resume/ingestion/parser.py` using `pdfminer.high_level.extract_text` to parse local PDF files (Milestone 8.2).
+- **Resume Segmentation**: Implemented `ResumeExtractor` in `app/resume/extraction/extractor.py` using `MistralClient` to extract Candidate Profile, Education, Experience, Projects, Skills, Certifications, Summary, Achievements, and Publications (Milestone 8.3).
+- **Skill Normalization**: Integrated `SkillNormalizationService` in `ResumeService` to normalize extracted skills against the ESCO taxonomy, producing confidence scores (Milestone 8.4).
+- **Canonical Schemas**: Designed Pydantic v2 schemas in `app/resume/schemas/schemas.py` representing `ResumeIntelligenceReport` (Milestone 8.5).
+- **FastAPI Endpoints**: Registered routes `POST /resume/analyze` and `POST /api/v1/resume/analyze` in `app/api/v1/endpoints/resume_api.py`.
+
+### How It Works
+1. A candidate uploads their resume PDF to `POST /resume/analyze`.
+2. `ResumeParser` extracts raw text from the PDF.
+3. `ResumeExtractor` calls Mistral AI (`mistral-small-latest`) to segment raw text into a structured profile, projects, experience, and raw skill list.
+4. `ResumeService` maps raw skills to the ESCO taxonomy using `SkillNormalizationService` and fills in normalized skill names and confidence scores.
+5. Temporary uploaded PDF files are deleted, and the complete `ResumeIntelligenceReport` JSON payload is returned.
+
+### How to Run
+Analyze a resume PDF using Curl:
+```bash
+curl -X POST http://localhost:8000/resume/analyze -F "file=@tests/fixtures/resume/student_resume.json"
+```
+
+### How to Test
+Run the new resume unit test suite:
+```bash
+.venv\Scripts\pytest tests/unit/test_resume.py -v
+```
+
+## Phase 9 Expansion: Job ↔ Resume Compatibility Engine
+
+### What Was Built
+- **Compatibility Scoring Engine**: Scaffolded `app/compatibility/` structure containing scoring engines and services (Milestone 9.1).
+- **Skill Matching**: Compares resume skills (raw and normalized) against JD requirements, sorting into matched, missing, and additional skill sets (Milestone 9.2).
+- **Experience Matching**: Computes candidate years vs JD minimum experience requirements and flags gap years (Milestone 9.3).
+- **Education Matching**: Maps candidate degrees to required levels (Bachelor's, Master's, Ph.D.) and returns matching status (Milestone 9.4).
+- **Weighted Scores**: Formulates explainable scoring: Skills (50%), Experience (25%), Education (10%), Projects (10%), Certs (5%) normalized to a scale of 0-100 (Milestone 9.5).
+- **Gap & Strength Analyses**: Identifies critical/moderate/minor gaps and candidate strengths (Milestones 9.6, 9.7).
+- **FastAPI Endpoints**: Registered endpoints `POST /compatibility/analyze`, `POST /compatibility/analyze-pdf`, and `POST /compatibility/analyze-url` in `app/api/v1/endpoints/compatibility_api.py`.
+
+### How to Run
+Compare a pre-parsed Resume and Job description directly:
+```bash
+curl -X POST http://localhost:8000/compatibility/analyze -H "Content-Type: application/json" -d '{"resume": {...}, "job": {...}}'
+```
+
+Compare an uploaded resume PDF against a database Job ID:
+```bash
+curl -X POST http://localhost:8000/compatibility/analyze-pdf -F "resume_file=@my_resume.pdf" -F "job_id=my-job-uuid-here"
+```
+
+### How to Test
+Run the compatibility unit test suite:
+```bash
+.venv\Scripts\pytest tests/unit/test_compatibility.py -v
+```
+
+## Phase 10 Expansion: Mistral Resume Recommendations & Optimization Engine
+
+### What Was Built
+- **Personalized Recommendations**: Design and implement the Mistral prompt template framework (`app/recommendations/prompts/prompts.py`) to instruct `mistral-small-latest` to analyze matching reports without fact fabrication.
+- **Section-Level Suggestions**: Generated advisory items categorizing improvements (e.g. Missing Skills, Keyword optimizations, Certifications, Projects).
+- **ATS Keyword Gap Analysis**: Highlighted missing/low-coverage terms and instructions on integrating them naturally.
+- **Application Readiness Score**: Aggregated compatibility scores and LLM recommendations into a readiness rating (0-100) and actionable summary.
+- **FastAPI Endpoints**: Registered endpoints `POST /resume/recommendations` and `POST /api/v1/resume/recommendations` that orchestrate the full scoring and Mistral AI flow.
+
+### How to Run
+Trigger recommendations generation using Curl:
+```bash
+curl -X POST http://localhost:8000/resume/recommendations -H "Content-Type: application/json" -d '{"resume": {...}, "job": {...}}'
+```
+
+### How to Test
+Run the recommendations unit test suite:
+```bash
+.venv\Scripts\pytest tests/unit/test_recommendations.py -v
+```

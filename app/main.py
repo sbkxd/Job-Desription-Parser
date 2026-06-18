@@ -64,9 +64,23 @@ def create_app() -> FastAPI:
     )
 
     # Routers
+    from app.api.v1.endpoints.compatibility_api import (
+        router as compatibility_router,  # noqa: PLC0415
+    )
+    from app.api.v1.endpoints.recommendations_api import (
+        router as recommendations_router,  # noqa: PLC0415
+    )
+    from app.api.v1.endpoints.resume_api import router as resume_router  # noqa: PLC0415
     from app.api.v1.router import api_router  # noqa: PLC0415
 
     app.include_router(api_router, prefix="/api/v1")
+    app.include_router(resume_router, prefix="/resume", tags=["Resume"])
+    app.include_router(
+        compatibility_router, prefix="/compatibility", tags=["Compatibility"]
+    )
+    app.include_router(
+        recommendations_router, prefix="/resume", tags=["Recommendations"]
+    )
 
     return app
 

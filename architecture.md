@@ -277,3 +277,27 @@ graph LR
 | Results Dashboard | `frontend/src/components/ResultsDashboard.tsx` | Presents role profiles, checklist qualifications, timelines, tag clouds, Recharts graphs, copy actions, and download links. |
 | Zustand State Store | `frontend/src/store/useStore.ts` | Handles active stage tracking, error catching, and local caching of the compiled report. |
 | API Service Layer | `frontend/src/services/api.ts` | Integrates API endpoints `/run/url`, `/run/upload`, and `/health` with browser forms. |
+
+### Resume Ingestion & Resume Intelligence (Phase 8 - Expansion)
+| Component | Module | Responsibility |
+|-----------|--------|----------------|
+| `ResumeParser` | `app.resume.ingestion.parser` | Extracts raw text from candidate PDF resumes using `pdfminer.high_level.extract_text`. |
+| `ResumeExtractor` | `app.resume.extraction.extractor` | Leverages Mistral AI (`mistral-small-latest`) to segment resumes and extract candidate profiles (name, education, experience, projects, skills). |
+| `ResumeService` | `app.resume.services.service` | Orchestrates the end-to-end resume flow: text parsing, structured extraction, and skill normalization via `SkillNormalizationService`. |
+| `ResumeIntelligenceReport` | `app.resume.schemas.schemas` | Pydantic v2 schemas representing candidate profiles, education/experience entries, and ESCO-aligned skills. |
+| `Resume Router` | `app.api.v1.endpoints.resume_api` | Exposes `POST /resume/analyze` and `POST /api/v1/resume/analyze` for PDF upload processing. |
+
+### Job ↔ Resume Compatibility Engine (Phase 9 - Expansion)
+| Component | Module | Responsibility |
+|-----------|--------|----------------|
+| `CompatibilityEngine` | `app.compatibility.scoring.scoring` | Compares candidate attributes (skills, experience, education, projects, certifications) against JD requirements and calculates a weighted compatibility score. |
+| `CompatibilityService` | `app.compatibility.services.service` | Coordinates matching logic by loading pre-processed reports or executing JD/resume pipeline processing from PDFs and URLs. |
+| `CompatibilityReport` | `app.compatibility.schemas.schemas` | Pydantic v2 response schemas representing overall compatibility scores, matched/missing skills, experience/education gaps, critical gaps, and strengths. |
+| `Compatibility Router` | `app.api.v1.endpoints.compatibility_api` | Exposes endpoints `POST /compatibility/analyze`, `POST /compatibility/analyze-pdf`, and `POST /compatibility/analyze-url`. |
+
+### Mistral Resume Recommendations & Optimization Engine (Phase 10 - Expansion)
+| Component | Module | Responsibility |
+|-----------|--------|----------------|
+| `RecommendationService` | `app.recommendations.services.service` | Orchestrates the recommendations generation using Mistral AI, calculating targeted section-level suggestions and ATS optimization guidelines. |
+| `ResumeOptimizationReport` / `MistralRecommendationsResponse` | `app.recommendations.schemas.schemas` | Pydantic v2 response schemas representing optimization suggestions, ATS recommendations, tailored summary, and aggregated readiness score. |
+| `Recommendations Router` | `app.api.v1.endpoints.recommendations_api` | Exposes endpoints `POST /resume/recommendations` and `POST /api/v1/resume/recommendations`. |

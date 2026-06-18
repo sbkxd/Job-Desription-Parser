@@ -7,6 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-06-18
+
+### Added
+- **Mistral Resume Recommendations & Optimization Engine**: Scaffolded recommendations module (`app/recommendations/`) containing prompts, schemas, and services (Milestone 10.1).
+- **Personalized Recommendations Framework**: Created structured Mistral system and user prompts instructing the LLM to generate advisor-only optimizations without fabricating facts (Milestone 10.2).
+- **Suggestion Parsing & Section-Level Recommendations**: Designed logic to parse suggestions for Resume Improvements (missing skills, keywords, certs, experience) and ATS optimization guidelines (Milestones 10.3, 10.4, 10.5).
+- **Grounded Resume Summary & Readiness Aggregation**: Created readiness score calculations based on compatibility and LLM suggestions (Milestones 10.6, 10.7).
+- **API Endpoints**: Integrated `POST /resume/recommendations` and `/api/v1/resume/recommendations` endpoints.
+- **Testing**: Added unit test coverage for recommendation generators and endpoints in `tests/unit/test_recommendations.py`.
+
+## [0.14.0] - 2026-06-18
+
+
+### Added
+- **Job-Resume Compatibility Engine**: Scaffolded compatibility module (`app/compatibility/`) containing scoring, gap analysis, schemas, and services (Milestone 9.1).
+- **Skill Matching**: Implemented comparative skill matching returning matched, missing, and additional skills using exact, normalized, and substring rules (Milestone 9.2).
+- **Experience Matching**: Developed experience match scoring comparing required JD years vs candidate profile years (Milestone 9.3).
+- **Education Matching**: Implemented degree level comparison checking if candidate education meets or exceeds required credentials (Milestone 9.4).
+- **Weighted Scoring**: Implemented 0-100 scoring based on Skills (50%), Experience (25%), Education (10%), Projects (10%), and Certifications (5%) (Milestone 9.5).
+- **Gap & Strength Analyses**: Added critical/moderate/minor gap identification and candidate strengths highlighted output (Milestones 9.6, 9.7).
+- **API Endpoints**: Created endpoints `POST /compatibility/analyze`, `POST /compatibility/analyze-pdf`, and `POST /compatibility/analyze-url` in `app/api/v1/endpoints/compatibility_api.py`.
+- **Testing**: Added unit and regression tests in `tests/unit/test_compatibility.py` verifying scoring rules and endpoint behaviors.
+
+### Changed
+- **Main Router**: Integrated compatibility router in `app/main.py` and `app/api/v1/router.py`.
+
+## [0.13.0] - 2026-06-18
+
+### Added
+- **Resume Ingestion & Intelligence**: Scaffolded the resume module (`app/resume/`) containing ingestion, extraction, normalization, schemas, services, and validators (Milestone 8.1).
+- **Resume PDF Ingestion**: Developed `ResumeParser` in `app/resume/ingestion/parser.py` using `pdfminer.high_level.extract_text` to parse local PDF files (Milestone 8.2).
+- **Resume Segmentation**: Implemented `ResumeExtractor` in `app/resume/extraction/extractor.py` using `MistralClient` to extract Candidate Profile, Education, Experience, Projects, Skills, Certifications, Summary, Achievements, and Publications (Milestone 8.3).
+- **Skill Normalization**: Integrated `SkillNormalizationService` in `ResumeService` to normalize extracted skills against the ESCO taxonomy, producing confidence scores (Milestone 8.4).
+- **Canonical Schemas**: Designed Pydantic v2 schemas in `app/resume/schemas/schemas.py` representing `ResumeIntelligenceReport` (Milestone 8.5).
+- **FastAPI Endpoints**: Registered routes `POST /resume/analyze` and `POST /api/v1/resume/analyze` in `app/api/v1/endpoints/resume_api.py`.
+- **Testing**: Added unit test fixtures under `tests/fixtures/resume/` and unit test suite `tests/unit/test_resume.py` achieving 95%+ coverage on resume components.
+
+### Changed
+- **API Router**: Included `resume_router` under prefix `/resume` directly in both `app/main.py` and `app/api/v1/router.py`.
+
 ## [0.12.0] - 2026-06-15
 
 ### Added
