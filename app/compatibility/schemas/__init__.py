@@ -1,0 +1,1 @@
+"""Compatibility schemas package."""
