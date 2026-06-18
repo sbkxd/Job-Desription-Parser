@@ -19,7 +19,7 @@ docker compose down db
 docker compose up -d db
 
 Write-Host "Waiting 25 seconds for PostgreSQL database and SentenceTransformer models to initialize..." -ForegroundColor Yellow
-Start-Sleep -Seconds 25
+Start-Sleep -Seconds 45
 
 
 Write-Host "Running Alembic migrations..." -ForegroundColor Yellow
