@@ -1,0 +1,1 @@
+"""Recommendations mistral integration package."""
