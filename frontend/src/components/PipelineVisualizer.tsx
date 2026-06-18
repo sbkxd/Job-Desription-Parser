@@ -12,25 +12,26 @@ import {
   FileCheck,
   Loader2,
   CheckCircle,
-  AlertTriangle
+  AlertTriangle,
+  UserCheck
 } from 'lucide-react';
 
 const stageMetadata = {
   ingestion: {
     label: 'Ingestion',
-    description: 'Fetching source content',
+    description: 'Fetching and uploading PDF/URL',
     icon: Download,
     color: '#00E5FF',
   },
   segmentation: {
     label: 'Segmentation',
-    description: 'Deconstructing sections',
+    description: 'Deconstructing document layout',
     icon: Layers,
     color: '#8B5CF6',
   },
   extraction: {
     label: 'Extraction',
-    description: 'NER skill tagging',
+    description: 'Tagging skills and experience',
     icon: Cpu,
     color: '#3B82F6',
   },
@@ -40,22 +41,28 @@ const stageMetadata = {
     icon: MapPin,
     color: '#F59E0B',
   },
-  review: {
-    label: 'Review Queue',
-    description: 'AI confidence thresholding',
+  compatibility: {
+    label: 'Compatibility',
+    description: 'Weighted score matching',
+    icon: UserCheck,
+    color: '#EC4899',
+  },
+  recommendations: {
+    label: 'Recommendations',
+    description: 'LLM Optimization advice',
     icon: CheckSquare,
     color: '#EF4444',
   },
   report: {
-    label: 'Intelligence Report',
-    description: 'Compiling structural model',
+    label: 'Final Report',
+    description: 'Assembling career intelligence',
     icon: FileCheck,
     color: '#10B981',
   },
 };
 
 export default function PipelineVisualizer() {
-  const { isAnalyzing, progress, error, activeStageIndex } = useStore();
+  const { isAnalyzing, progress, error } = useStore();
 
   if (!isAnalyzing && !error) return null;
 
@@ -66,7 +73,7 @@ export default function PipelineVisualizer() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-border-dark pb-4 gap-2">
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-text-secondary">Pipeline Telemetry</h3>
-            <p className="text-2xs font-mono text-zinc-500">LangGraph Executor: state_graph_flow_v1</p>
+            <p className="text-2xs font-mono text-zinc-500">LangGraph Executor: state_graph_flow_v2</p>
           </div>
           {error ? (
             <div className="flex items-center space-x-1.5 text-xs text-error-bg font-semibold">
@@ -82,9 +89,10 @@ export default function PipelineVisualizer() {
         </div>
 
         {/* Horizontal Pipeline Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-6 relative">
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-6 relative">
           {progress.map((stageProg, index) => {
             const meta = stageMetadata[stageProg.stage];
+            if (!meta) return null;
             const IconComponent = meta.icon;
 
             const isIdle = stageProg.status === 'idle';
@@ -143,6 +151,7 @@ export default function PipelineVisualizer() {
           {progress.map((stageProg, idx) => {
             if (stageProg.status === 'idle') return null;
             const meta = stageMetadata[stageProg.stage];
+            if (!meta) return null;
             return (
               <div key={idx} className="flex items-start space-x-2">
                 <span className="text-zinc-600">[{new Date().toLocaleTimeString()}]</span>

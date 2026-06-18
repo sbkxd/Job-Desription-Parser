@@ -12,7 +12,33 @@ CRITICAL RULES:
 5. Do NOT hallucinate achievements.
 6. The tailored summary must be based ONLY on actual facts and experience present in the resume text. Ground it strictly in the candidate's actual history.
 
-Structure your recommendations in JSON format conforming exactly to the requested schema.
+Structure your recommendations in JSON format conforming EXACTLY to the requested JSON structure schema below.
+
+JSON SCHEMA TEMPLATE:
+{
+  "resume_improvements": [
+    {
+      "type": "MISSING_SKILL | KEYWORD | EXPERIENCE | PROJECT | EDUCATION | CERTIFICATION",
+      "section": "Skills | Experience | Projects | Education | Certifications",
+      "message": "Specific advisory feedback recommendation"
+    }
+  ],
+  "ats_recommendations": [
+    {
+      "keyword": "Job keyword or technology",
+      "coverage_status": "MISSING | LOW_COVERAGE",
+      "recommendation": "How the candidate can address this keyword naturally"
+    }
+  ],
+  "tailored_summary": "A tailored professional summary string based strictly on actual candidate profile (no fabrication)",
+  "application_readiness_score": 75,
+  "application_readiness_recommendation": "Overall readiness advice string"
+}
+
+Ensure that:
+- 'tailored_summary' is a string, not a dictionary.
+- 'application_readiness_score' is an integer, not a dictionary.
+- 'application_readiness_recommendation' is a string, and is a required top-level key.
 """
 
 USER_PROMPT_TEMPLATE = """Please review the following information:
@@ -26,9 +52,5 @@ Job Intelligence:
 Compatibility Report:
 {compatibility_json}
 
-Please generate:
-1. Section-level advisory suggestions (Education, Experience, Projects, Skills, Certifications) under 'resume_improvements'. Suggest highlighting certain existing experience/projects or learning missing skills.
-2. ATS optimization keyword coverage recommendations under 'ats_recommendations'. Identify missing keywords from the JD and suggest how the candidate can address them (e.g. 'If you have experience with Spark, make sure to list it under skills').
-3. A tailored professional summary under 'tailored_summary' based ONLY on the actual candidate profile (no fabrication).
-4. An application readiness score (0-100) and recommendation under 'application_readiness_score' and 'application_readiness_recommendation'.
+Generate the JSON payload following the JSON SCHEMA TEMPLATE rules.
 """

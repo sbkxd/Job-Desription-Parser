@@ -1,4 +1,9 @@
-import { JobIntelligenceReport } from '../types';
+import {
+  JobIntelligenceReport,
+  ResumeIntelligenceReport,
+  CompatibilityReport,
+  ResumeOptimizationReport
+} from '../types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
 
@@ -24,7 +29,7 @@ export class ApiService {
   }
 
   /**
-   * Run parser pipeline on an uploaded PDF file
+   * Run parser pipeline on an uploaded PDF job description file
    */
   static async analyzeFile(file: File): Promise<JobIntelligenceReport> {
     const formData = new FormData();
@@ -38,6 +43,72 @@ export class ApiService {
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
       throw new Error(errorData.detail || `Server returned ${response.status}: ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
+  /**
+   * Analyze an uploaded resume PDF file
+   */
+  static async analyzeResume(file: File): Promise<ResumeIntelligenceReport> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch(`${API_BASE_URL}/resume/analyze`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(errorData.detail || `Resume parsing failed: ${errorData.detail || response.statusText}`);
+    }
+
+    return response.json();
+  }
+
+  /**
+   * Run compatibility analysis on pre-parsed resume and job reports
+   */
+  static async analyzeCompatibility(
+    resume: ResumeIntelligenceReport,
+    job: JobIntelligenceReport
+  ): Promise<CompatibilityReport> {
+    const response = await fetch(`${API_BASE_URL}/compatibility/analyze`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ resume, job }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(errorData.detail || `Compatibility evaluation failed: ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
+  /**
+   * Run recommendations engine on pre-parsed resume and job reports
+   */
+  static async getRecommendations(
+    resume: ResumeIntelligenceReport,
+    job: JobIntelligenceReport
+  ): Promise<ResumeOptimizationReport> {
+    const response = await fetch(`${API_BASE_URL}/resume/recommendations`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ resume, job }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(errorData.detail || `Optimization advisory failed: ${response.statusText}`);
     }
 
     return response.json();
