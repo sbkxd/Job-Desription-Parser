@@ -1,0 +1,60 @@
+{
+  "candidate_profile": {
+    "candidate_name": "Elena Data",
+    "education": [
+      {
+        "degree": "Ph.D.",
+        "field_of_study": "Statistics",
+        "school": "Science Institute",
+        "graduation_year": 2018
+      }
+    ],
+    "years_experience": 8.0,
+    "certifications": [],
+    "summary": "Data Scientist with focus on predictive modeling and machine learning.",
+    "achievements": ["Built churn prediction model with 92% AUC"],
+    "publications": ["Statistical analysis in bioinformatics journal"]
+  },
+  "skills": [
+    {
+      "raw_skill": "Python",
+      "normalized_skill": null,
+      "confidence": 0.0
+    },
+    {
+      "raw_skill": "SQL",
+      "normalized_skill": null,
+      "confidence": 0.0
+    },
+    {
+      "raw_skill": "Scikit-Learn",
+      "normalized_skill": null,
+      "confidence": 0.0
+    }
+  ],
+  "experience": [
+    {
+      "job_title": "Lead Data Scientist",
+      "company": "Finance Inc",
+      "start_date": "March 2021",
+      "end_date": "Present",
+      "description": "Led data science team modeling risk metrics.",
+      "years": 5.0
+    },
+    {
+      "job_title": "Data Scientist",
+      "company": "Retail Group",
+      "start_date": "March 2018",
+      "end_date": "March 2021",
+      "description": "Analyzed customer transaction patterns.",
+      "years": 3.0
+    }
+  ],
+  "projects": [
+    {
+      "project_title": "Customer Segmentation",
+      "description": "Clustering customers based on activity.",
+      "technologies": ["Python", "SQL", "Scikit-Learn"]
+    }
+  ]
+}

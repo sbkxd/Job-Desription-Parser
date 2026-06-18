@@ -1,0 +1,1 @@
+"""Resume schemas sub-module."""

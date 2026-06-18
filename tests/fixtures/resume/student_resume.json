@@ -1,0 +1,47 @@
+{
+  "candidate_profile": {
+    "candidate_name": "Jane Student",
+    "education": [
+      {
+        "degree": "Bachelor of Science",
+        "field_of_study": "Computer Science",
+        "school": "University of Technology",
+        "graduation_year": 2026
+      }
+    ],
+    "years_experience": 0.5,
+    "certifications": ["AWS Certified Cloud Practitioner"],
+    "summary": "Eager computer science student looking for an internship.",
+    "achievements": ["Dean's List 2024", "1st Place University Hackathon"],
+    "publications": []
+  },
+  "skills": [
+    {
+      "raw_skill": "Python",
+      "normalized_skill": null,
+      "confidence": 0.0
+    },
+    {
+      "raw_skill": "Java",
+      "normalized_skill": null,
+      "confidence": 0.0
+    }
+  ],
+  "experience": [
+    {
+      "job_title": "Teaching Assistant",
+      "company": "University of Technology",
+      "start_date": "September 2025",
+      "end_date": "Present",
+      "description": "Assisted students in Python programming labs.",
+      "years": 0.5
+    }
+  ],
+  "projects": [
+    {
+      "project_title": "Weather App",
+      "description": "A weather tracking application built using Python.",
+      "technologies": ["Python", "Flask"]
+    }
+  ]
+}

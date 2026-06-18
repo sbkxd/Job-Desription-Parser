@@ -1,0 +1,52 @@
+{
+  "candidate_profile": {
+    "candidate_name": "Kenji AI",
+    "education": [
+      {
+        "degree": "Bachelor of Technology",
+        "field_of_study": "Information Technology",
+        "school": "Tech Institute",
+        "graduation_year": 2022
+      }
+    ],
+    "years_experience": 4.0,
+    "certifications": [],
+    "summary": "AI Engineer focused on LLMs, retrieval-augmented generation (RAG), and agentic workflows.",
+    "achievements": ["Deployed RAG agent supporting 50k active users"],
+    "publications": []
+  },
+  "skills": [
+    {
+      "raw_skill": "Python",
+      "normalized_skill": null,
+      "confidence": 0.0
+    },
+    {
+      "raw_skill": "PyTorch",
+      "normalized_skill": null,
+      "confidence": 0.0
+    },
+    {
+      "raw_skill": "LangChain",
+      "normalized_skill": null,
+      "confidence": 0.0
+    }
+  ],
+  "experience": [
+    {
+      "job_title": "AI Engineer",
+      "company": "Cognitive Solutions",
+      "start_date": "June 2022",
+      "end_date": "Present",
+      "description": "Implemented agentic workflows using LangGraph and Mistral AI.",
+      "years": 4.0
+    }
+  ],
+  "projects": [
+    {
+      "project_title": "AI Copilot",
+      "description": "Chat agent answering technical docs.",
+      "technologies": ["Python", "LangChain", "PyTorch"]
+    }
+  ]
+}
